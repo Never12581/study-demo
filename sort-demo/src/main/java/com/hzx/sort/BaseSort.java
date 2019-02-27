@@ -1,5 +1,7 @@
 package com.hzx.sort;
 
+import java.util.Random;
+
 /**
  * @Author: bocai.huang
  * @Descripition:
@@ -23,6 +25,15 @@ public interface BaseSort {
             System.out.print(array[i] + ",");
         }
         System.out.println();
+    }
+
+    static int[] randomArray(){
+        int[] arr = new int[1000000];
+        Random random = new Random();
+        for(int i = 0 ; i < 1000000 ; i++){
+            arr[i] = random.nextInt(Integer.MAX_VALUE);
+        }
+        return arr;
     }
 
 }
