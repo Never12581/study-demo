@@ -40,35 +40,4 @@ public interface QuickSort {
         }
     }
 
-    static void sort_mine(int[] array, int l, int r) {
-        if (l < r) {
-            // 作为基准值
-            int x = array[l];
-            int i = l;
-            int j = r;
-            while (i < j) {
-                // 先从后往前，查找一个值小于基准值
-                while (i < j && array[j] >= x) {
-                    j--;
-                }
-                if (i < j) {
-                    array[i++] = array[j];
-                }
-
-                // 再从前往后找，查找到一个大于基准值的
-                while (i < j && array[i] < x) {
-                    i++;
-                }
-                if (i < j) {
-                    array[j--] = array[i];
-                }
-                array[i] = x;
-            }
-            // 递归调用
-            sort_mine(array, l, i - 1);
-            sort_mine(array, i + 1, r);
-        }
-
-    }
-
 }

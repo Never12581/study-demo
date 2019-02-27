@@ -18,10 +18,10 @@ public class RadixSort {
         // O（n）
         int max = getMax(array);
         // 获取位数
-        int digit = String.valueOf(max).length() ;
+        int digit = String.valueOf(max).length();
         //取10个链表的数组
         Node[] buckets = new Node[10];
-        ttt(array, buckets, digit,0);
+        ttt(array, buckets, digit, 0);
     }
 
     /**
@@ -29,7 +29,7 @@ public class RadixSort {
      * @param buckets 桶
      * @param digit   当前排序的位
      */
-    public static void ttt(int[] array, Node[] buckets, int digit , int currentDigit) {
+    public static void ttt(int[] array, Node[] buckets, int digit, int currentDigit) {
         if (array == null) {
             throw new IllegalArgumentException("the array is null !");
         }
@@ -57,6 +57,14 @@ public class RadixSort {
             //     index = 0 ;
             // }
 
+            // 也慢
+            // int index = 0;
+            // char[] cTemp = String.valueOf(array[i]).toCharArray();
+            // int charIndex = cTemp.length - currentDigit - 1;
+            // if (charIndex >= 0) {
+            //     index = cTemp[charIndex] - 48;
+            // }
+
             Node node = buckets[index];
             buckets[index] = entryNode(node, array[i]);
         }
@@ -70,7 +78,7 @@ public class RadixSort {
         // node数组清空
         clearNodeArray(buckets);
 
-        ttt(array, buckets, digit,currentDigit);
+        ttt(array, buckets, digit, currentDigit);
 
     }
 
@@ -95,20 +103,21 @@ public class RadixSort {
 
     /**
      * 进入链表
+     *
      * @param node
      * @param value
      * @return
      */
     private static Node entryNode(Node node, int value) {
         Node waitToInsert = new Node().setValue(value).setNext(null);
-        if(node == null) {
+        if (node == null) {
             return waitToInsert;
         }
         Node tempNode = node.getLast();
-        if(tempNode==null) {
+        if (tempNode == null) {
             tempNode = node.getNext();
         }
-        if(tempNode!=null) {
+        if (tempNode != null) {
             tempNode.setNext(waitToInsert);
         } else {
             node.setNext(waitToInsert);
@@ -147,6 +156,7 @@ public class RadixSort {
 
     /**
      * 因为每次只分10个桶，所以在大量数据的情况下，形成的链会很长，为了优化，此时将当前链的最后一个链回到头节点
+     * fixme：当前数据结构未完善，默认传入节点为首节点
      */
     static class Node {
         private int value;

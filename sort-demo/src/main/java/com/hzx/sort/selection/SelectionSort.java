@@ -9,6 +9,9 @@ import com.hzx.sort.BaseSort;
  */
 public interface SelectionSort {
 
+    /**
+     * 优于冒泡排序的原因是减少了 内存交换的次数
+     */
     static void sort(int[] array) {
         int length = array.length;
         for (int i = 0; i < length; i++) {

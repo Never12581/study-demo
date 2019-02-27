@@ -1,8 +1,5 @@
 package com.hzx.sort.merge;
 
-import com.hzx.sort.insertion.InsertionSort;
-import com.hzx.sort.quick.QuickSort;
-
 /**
  * @Author: bocai.huang
  * @Descripition:
@@ -10,15 +7,14 @@ import com.hzx.sort.quick.QuickSort;
  */
 public interface MergeSort {
 
+    /**
+     * 归并排序，将两个有序数组合并。以下算法是，直到数组中数量为1 ，自然是有序的，然后再进行归并排序，是一种递归的思想
+     */
+
     static int[] sort(int[] array, int left, int right) {
 
-        // if (Math.abs(left - right) < 10000) {
-        //     QuickSort.sort(array, left, right);
-        //     return array;
-        // }
-
         if (right == left) {
-            return new int[]{ array[left]};
+            return new int[] { array[left] };
         }
 
         int mid = right / 2 + left / 2;

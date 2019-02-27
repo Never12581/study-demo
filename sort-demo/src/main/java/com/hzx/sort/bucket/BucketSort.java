@@ -9,10 +9,19 @@ import java.util.Objects;
  */
 public class BucketSort {
 
+    /**
+     * 思想：比如有100w个数据，分配100W+1个桶，第一遍遍历查询出其中最大值，最小值；
+     * 计算得到最大值最小值之间的差值 / 100w+1
+     * 再遍历数组，将当前值与最小值做计算得到，当前值应该在哪个桶中，
+     * 入桶的过程做一次简单的比较，使桶中从小到大（or 从大到小） 排序
+     * 再将桶中的数据，从小到大（or 从大到小） 读取回数组
+     * 时间复杂度O（n） 级别的排序 ， 牺牲空间加快时间。
+     */
+
     public static void sort(int[] array) {
 
         if (array == null || array.length <= 2) {
-            return ;
+            return;
         }
 
         int length = array.length;
@@ -28,47 +37,21 @@ public class BucketSort {
         }
 
         Node[] nodes = new Node[length + 1];
+        // fixme : 耗时操作
         double meanDeviation = ((max - min) / 1.0) / length;
 
         for (int i = 0; i < length; i++) {
             int index = (int) Math.floor((array[i] - min) / meanDeviation);
             Node node = nodes[index];
-            nodes[index] = setNodeValue(node, array[i]);
-        }
-        getArrayFromNodes(nodes,array);
-        return ;
-    }
-
-    private static Node setNodeValue(Node node, int value) {
-        Node waitToInsertNode = new Node().setPost(null).setPre(null).setValue(value);
-        if (Objects.isNull(node)) {
-            return waitToInsertNode;
-        }
-
-        // 原先的node不为空 则判断值
-        Node tempNode = node;
-        while (!Objects.isNull(tempNode)) {
-            if (tempNode.getValue() >= value) {
-                // 做交换
-                Node beforeNode = tempNode.getPre();
-                if (!Objects.isNull(beforeNode)) {
-                    beforeNode.setPost(waitToInsertNode);
-                    waitToInsertNode.setPre(beforeNode);
-                }
-                waitToInsertNode.setPost(tempNode);
-                tempNode.setPre(waitToInsertNode);
-                break;
-            }else
-            if(Objects.isNull(tempNode.getPost()) && tempNode.getValue() < value) {
-                tempNode.setPost(waitToInsertNode);
-                waitToInsertNode.setPre(tempNode);
-                break;
+            if(node == null ){
+                node = new Node().setPost(null).setPre(null).setValue(array[i]);
+            } else {
+                node.insertNode(node,array[i]);
             }
-            tempNode = tempNode.getPost();
+            nodes[index] = node;
         }
-
-        return node;
-
+        getArrayFromNodes(nodes, array);
+        return;
     }
 
     private static void getArrayFromNodes(Node[] nodes, int[] array) {
@@ -84,7 +67,7 @@ public class BucketSort {
 
     /**
      * 因为普通的桶排序，数据足够分散，所以链不会太长，所以效率还可以
-     * 如果链过长，则会影响效率
+     * fixme : 不排除链过长，效率问题，所以需要改进当前数据结构
      */
     static class Node {
         private int value;
@@ -124,6 +107,38 @@ public class BucketSort {
                     "value=" + value +
                     ", post=" + post +
                     '}';
+        }
+
+        public Node insertNode(Node node, int value) {
+            Node waitToInsertNode = new Node().setPost(null).setPre(null).setValue(value);
+            if (Objects.isNull(node)) {
+                return waitToInsertNode;
+            }
+
+            // 原先的node不为空 则判断值
+            Node tempNode = node;
+            // fixme:若数据比较密集，则当前效率太差！
+            while (!Objects.isNull(tempNode)) {
+                if (tempNode.getValue() >= value) {
+                    // 做交换
+                    Node beforeNode = tempNode.getPre();
+                    if (!Objects.isNull(beforeNode)) {
+                        beforeNode.setPost(waitToInsertNode);
+                        waitToInsertNode.setPre(beforeNode);
+                    }
+                    waitToInsertNode.setPost(tempNode);
+                    tempNode.setPre(waitToInsertNode);
+                    break;
+                } else if (Objects.isNull(tempNode.getPost()) && tempNode.getValue() < value) {
+                    tempNode.setPost(waitToInsertNode);
+                    waitToInsertNode.setPre(tempNode);
+                    break;
+                }
+                tempNode = tempNode.getPost();
+            }
+
+            return node;
+
         }
     }
 }
