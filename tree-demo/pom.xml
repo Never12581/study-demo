@@ -8,10 +8,10 @@
         <version>1.5.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.hzx.sort</groupId>
-    <artifactId>sort-demo</artifactId>
+    <groupId>com.hzx.tree</groupId>
+    <artifactId>tree</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>sort-demo</name>
+    <name>tree</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
