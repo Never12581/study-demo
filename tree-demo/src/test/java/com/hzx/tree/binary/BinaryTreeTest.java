@@ -10,15 +10,20 @@ import org.junit.Test;
  */
 public class BinaryTreeTest {
 
-    public static BinarySortTree<Integer> binarySortTree = null ;
+    public static BinarySearchTree<Integer> binarySearchTree = null ;
 
     @Before
     public void before(){
-        binarySortTree = new BinarySortTree<Integer>().setValue(2);
-        binarySortTree
-                .setLeftChild(new BinarySortTree().setValue(7).setLeftChild(new BinarySortTree().setValue(5)).setRightChild(new BinarySortTree().setValue(6)));
-        binarySortTree
-                .setRightChild(new BinarySortTree().setValue(17).setLeftChild(new BinarySortTree().setValue(15)).setRightChild(new BinarySortTree().setValue(16)));
+        binarySearchTree = new BinarySearchTree<>();
+        binarySearchTree.add(5);
+        binarySearchTree.add(2);
+        // binarySearchTree.add(9);
+        // binarySearchTree.add(1);
+        // binarySearchTree.add(3);
+        // binarySearchTree.add(4);
+        // binarySearchTree.add(8);
+        // binarySearchTree.add(6);
+        // binarySearchTree.add(7);
     }
 
     /**
@@ -26,7 +31,30 @@ public class BinaryTreeTest {
      */
     @Test
     public void preTraversal() {
-        System.out.println(binarySortTree);
+        binarySearchTree.inOrder();
+    }
+
+    @Test
+    public void remove(){
+        binarySearchTree.remove(3);
+        binarySearchTree.inOrder();
+    }
+
+    @Test
+    public void contains(){
+        System.out.println(binarySearchTree.contains(5));
+    }
+
+    @Test
+    public void findMax(){
+        System.out.println(binarySearchTree.findMax());
+    }
+
+    @Test
+    public void removeMax(){
+        for (int i = 0 ; i < 2 ; i++) {
+            System.out.println(binarySearchTree.removeMax());
+        }
     }
 
 }
