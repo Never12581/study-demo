@@ -1,5 +1,6 @@
 package com.hzx.tree.avl;
 
+import com.hzx.tree.binary.BinarySearchTree_MYINE;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,20 +11,20 @@ import org.junit.Test;
  */
 public class AVLTreeTest {
 
-    public static AVLTree<Integer> avlTree = null ;
+    public static BinarySearchTree_MYINE<Integer> binarySearchTreeMYINE = null ;
 
     @Before
     public void before(){
-        avlTree = new AVLTree<>();
-        avlTree.add(5);
-        avlTree.add(2);
-        avlTree.add(9);
-        avlTree.add(1);
-        avlTree.add(3);
-        avlTree.add(4);
-        avlTree.add(8);
-        avlTree.add(6);
-        avlTree.add(7);
+        binarySearchTreeMYINE = new BinarySearchTree_MYINE<>();
+        binarySearchTreeMYINE.add(5);
+        binarySearchTreeMYINE.add(2);
+        binarySearchTreeMYINE.add(9);
+        binarySearchTreeMYINE.add(1);
+        binarySearchTreeMYINE.add(3);
+        binarySearchTreeMYINE.add(4);
+        binarySearchTreeMYINE.add(8);
+        binarySearchTreeMYINE.add(6);
+        binarySearchTreeMYINE.add(7);
     }
 
     /**
@@ -31,42 +32,42 @@ public class AVLTreeTest {
      */
     @Test
     public void preTraversal() {
-        avlTree.inOrder();
+        binarySearchTreeMYINE.inOrder();
     }
 
     @Test
     public void remove(){
-        avlTree.remove(3);
-        avlTree.inOrder();
+        binarySearchTreeMYINE.remove(3);
+        binarySearchTreeMYINE.inOrder();
     }
 
     @Test
     public void contains(){
-        System.out.println(avlTree.contains(5));
+        System.out.println(binarySearchTreeMYINE.contains(5));
     }
 
     @Test
     public void findMax(){
-        System.out.println(avlTree.findMax());
+        System.out.println(binarySearchTreeMYINE.findMax());
     }
 
     @Test
     public void findMin(){
-        System.out.println(avlTree.findMin());
+        System.out.println(binarySearchTreeMYINE.findMin());
     }
 
     @Test
     public void removeMax(){
-        for(int i = 0 ; i < avlTree.size() ; i++) {
-            avlTree.removeMax();
+        for(int i = 0; i < binarySearchTreeMYINE.size() ; i++) {
+            binarySearchTreeMYINE.removeMax();
         }
     }
 
     @Test
     public void removeMin(){
-        System.out.println(avlTree.removeMin());
+        System.out.println(binarySearchTreeMYINE.removeMin());
         System.out.println("====");
-        avlTree.inOrder();
+        binarySearchTreeMYINE.inOrder();
     }
 
 }

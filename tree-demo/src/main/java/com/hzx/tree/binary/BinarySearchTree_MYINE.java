@@ -1,4 +1,4 @@
-package com.hzx.tree.avl;
+package com.hzx.tree.binary;
 
 import com.hzx.tree.abstracts.BalancedTree;
 
@@ -7,7 +7,7 @@ import com.hzx.tree.abstracts.BalancedTree;
  * @Descripition: 非递归版本，当前为残缺版本，因为并为加入自平衡操作
  * @Date: Create in 14:07 2019/3/6
  */
-public class AVLTree<T extends Comparable<T>> implements BalancedTree<T> {
+public class BinarySearchTree_MYINE<T extends Comparable<T>> implements BalancedTree<T> {
 
     // 节点高度：叶子节点高度为1 ，非叶子节点为深度最深的高度
     // 平衡因子：当前左，右子树高度差
@@ -15,12 +15,12 @@ public class AVLTree<T extends Comparable<T>> implements BalancedTree<T> {
     private Node root;
     private int size;
 
-    public AVLTree() {
+    public BinarySearchTree_MYINE() {
         this.root = null;
         size = 0;
     }
 
-    public AVLTree(Node root) {
+    public BinarySearchTree_MYINE(Node root) {
         this.root = root;
         this.size = 0;
     }
@@ -37,7 +37,7 @@ public class AVLTree<T extends Comparable<T>> implements BalancedTree<T> {
 
     @Override
     public void add(T value) {
-        root = add(root, value);
+        add(root, value);
     }
 
     @Override
@@ -62,10 +62,7 @@ public class AVLTree<T extends Comparable<T>> implements BalancedTree<T> {
 
     @Override
     public T removeMax() {
-        Node retNode = removeMax(root);
-        if (retNode != null) {
-            return retNode.value;
-        }
+        removeMax(root);
         return null;
     }
 
@@ -155,49 +152,38 @@ public class AVLTree<T extends Comparable<T>> implements BalancedTree<T> {
 
     // 删除以node为根节点的子树中的最大值，并返回被删除的节点
     private Node removeMax(Node node) {
-        if (node == null) {
+        //做法与min相似
+        Node currentNode = node;
+        Node parentNode = node;
+        if (currentNode == null) {
             return null;
         }
 
-        if (node.right == null) {
-            // 此时node为最大的节点
-            // fixme 但是根本没法处理 !!!! 这是个bug
-            return null;
+        while (currentNode.right != null) {
+            parentNode = currentNode;
+            currentNode = currentNode.right;
         }
-
-        while (node.right.right != null) {
-            node = node.right;
-
-        }
-        //
-        Node retNode = node.right;
-        if (retNode.left != null) {
-            node.right = retNode.left;
-        } else {
-            node.right = null;
-        }
-        return retNode;
+        parentNode.right = currentNode.left;
+        currentNode.left = null;
+        return currentNode;
     }
 
     // 在以当前节点为跟节点的子树中，删除其中最小值
     private Node removeMin(Node node) {
-        if (node == null) {
+        //做法与min相似
+        Node currentNode = node;
+        Node parentNode = node;
+        if (currentNode == null) {
             return null;
         }
-        while (node.left != null) {
-            if (node.left.left == null) {
-                break;
-            }
-            node = node.left;
+
+        while(currentNode.left!=null){
+            parentNode=currentNode;
+            currentNode=currentNode.left;
         }
-        // 当前node为最小值的父亲node
-        Node retNode = node.left;
-        if (retNode.right != null) {
-            node.left = retNode.right;
-        } else {
-            node.left = null;
-        }
-        return retNode;
+        parentNode.left=currentNode.right;
+        currentNode.right=null;
+        return currentNode;
     }
 
     // 在以node为根节点的子树中删除value元素
