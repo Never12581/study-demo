@@ -165,6 +165,7 @@ public class BinarySearchTree_MYINE<T extends Comparable<T>> implements Balanced
         }
         parentNode.right = currentNode.left;
         currentNode.left = null;
+        size--;
         return currentNode;
     }
 
@@ -183,6 +184,7 @@ public class BinarySearchTree_MYINE<T extends Comparable<T>> implements Balanced
         }
         parentNode.left=currentNode.right;
         currentNode.right=null;
+        size--;
         return currentNode;
     }
 
