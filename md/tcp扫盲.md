@@ -186,10 +186,10 @@
 - GBN ARQ协议是在发送端维护一个大小为N的发送窗口，在接收端维护一个大小为1的窗口；
 - SR ARQ协议是在发送端与接收端各自维护一个大小大于1的窗口。 
 
-**5、拥塞控制**
+### 五、拥塞控制
 
 此块内容容后完善
 
-**6、参考文章**
+### 六、参考文章
 
 - [TCP Performance - The Internet Protocol Journal - Volume 3, No. 2](https://www.cisco.com/c/en/us/about/press/internet-protocol-journal/back-issues/table-contents-5/ipj-archive/article09186a00800c8417.html)
