@@ -31,6 +31,7 @@
         <module>sentinel-demo</module>
         <module>sort-demo</module>
         <module>tree-demo</module>
+        <module>netty-demo</module>
     </modules>
 
 </project>
