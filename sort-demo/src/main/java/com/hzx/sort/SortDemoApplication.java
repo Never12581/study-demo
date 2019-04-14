@@ -16,41 +16,233 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static com.hzx.sort.BaseSort.randomArray;
 
 public class SortDemoApplication {
 
-    private static Map<String,String> map = new HashMap<>();
+    private static Map<String, String> map = new HashMap<>();
 
     public static void main(String[] args) {
-        test7();
+
+        TestClass.threadLocal.set("哈哈哈哈");
+
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 10; i++) {
+                int finalI = i;
+                System.out.println("第 （" + finalI + "） 次in sub thread  -----> " + TestClass.threadLocal.get());
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+
+                }
+            }
+        });
+
+        t1.start();
+
+        try {
+            Thread.sleep(10);
+            TestClass.threadLocal.set("nonononono");
+            t1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        TestClass.threadLocal.remove();
     }
 
-    public static void test7(){
-        Thread t = new Thread(()->{
-            System.out.println(Thread.currentThread().getName()+"开始执行了！");
+    /**
+     * wait / notify 测试
+     * 为验证，当前线程仅仅wait，其他线程会不会获取到锁
+     */
+    public static void test10() {
+        Object object = new Object();
 
-            for(int i = 0 ; i < 9000000 ; i++) {
+        new Thread(() -> {
+            synchronized (object) {
+                System.out.println(Thread.currentThread().getName() + "-------->hahahah");
                 try {
-                    Thread.sleep(2);
+                    object.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                System.out.println("是不是我永远都看不到了？");
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        new Thread(() -> {
+            synchronized (object) {
+                System.out.println(Thread.currentThread().getName() + "-------->hahahah");
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        new Thread(() -> {
+            synchronized (object) {
+                System.out.println(Thread.currentThread().getName() + "-------->hahahah");
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        try {
+            Thread.sleep(12000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("唤醒");
+        synchronized (object) {
+            object.notify();
+        }
+    }
+
+    /**
+     * synchroized测试继承
+     */
+    public static void test9() {
+        Main a = new Sub();
+        new Thread(() -> {
+            a.test();
+        }).start();
+
+        new Thread(() -> {
+            a.test();
+        }).start();
+
+    }
+
+    /**
+     * 测试Thread.stop对锁的影响
+     */
+    public static void test8() {
+
+        Lock lock = new ReentrantLock();
+
+        Thread t1 = new Thread(() -> {
+            lock.lock();
+            try {
+                while (true) {
+                    try {
+                        Thread.sleep(1000);
+                        System.out.println(Thread.currentThread().getName() + "这是t1");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } finally {
+                lock.unlock();
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            lock.lock();
+            try {
+                while (true) {
+                    try {
+                        Thread.sleep(1000);
+                        System.out.println(Thread.currentThread().getName() + "这是t2");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } finally {
+                lock.unlock();
+            }
+        });
+
+        Thread t3 = new Thread(() -> {
+            lock.lock();
+            try {
+                while (true) {
+                    try {
+                        Thread.sleep(1000);
+                        System.out.println(Thread.currentThread().getName() + "这是t3");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } finally {
+                lock.unlock();
+            }
+        });
+
+        t1.start();
+        t2.start();
+        t3.start();
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        t1.stop();
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        t2.stop();
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        t3.stop();
+
+    }
+
+    public static void test7() {
+        Thread t = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + "开始执行了！");
+
+            for (int i = 0; i < 900; i++) {
+                try {
+                    Thread.sleep(2);
+                    System.out.println("lalalal");
+                } catch (InterruptedException e) {
+                    // e.printStackTrace();
+                }
                 Thread.yield();
             }
-            System.out.println(Thread.currentThread().getName()+"执行完了！");
+            System.out.println(Thread.currentThread().getName() + "执行完了！");
         });
         t.start();
 
         System.out.println("等一下");
+        try {
+            Thread.sleep(20);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // t.interrupt();
-        t.stop();
+        boolean flag = t.isInterrupted();
+        System.out.println(flag);
+        // t.stop();
     }
 
-    public static void test6(){
-        map.put(new Random().nextInt()+"1","2");
+    public static void test6() {
+        map.put(new Random().nextInt() + "1", "2");
         test6();
     }
 
@@ -58,7 +250,7 @@ public class SortDemoApplication {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         Future future = executorService.submit(() -> {
-            System.out.println("线程名："+Thread.currentThread().getName());
+            System.out.println("线程名：" + Thread.currentThread().getName());
         });
 
         try {
@@ -79,9 +271,8 @@ public class SortDemoApplication {
         flag = executorService.isShutdown();
         System.out.println("isShutdown? " + flag);
 
-
-        executorService.submit(()->{
-            System.out.println(Thread.currentThread().getName()+" 这是我第二次被使用！");
+        executorService.submit(() -> {
+            System.out.println(Thread.currentThread().getName() + " 这是我第二次被使用！");
         });
 
         executorService.shutdown();
@@ -174,16 +365,6 @@ public class SortDemoApplication {
         flag = future.isCancelled();
         System.out.println("是否取消当前线程的操作！flag：" + flag);
 
-        // String threadName = null;
-        // try {
-        //     threadName = future.get();
-        // } catch (InterruptedException e) {
-        //     System.out.println(1);
-        // } catch (ExecutionException e) {
-        //     System.out.println(2);
-        // }
-        // System.out.println(threadName);
-
         executorService.shutdownNow();
         flag = executorService.isTerminated();
         System.out.println("线程池终止状态：" + flag);
@@ -227,20 +408,26 @@ public class SortDemoApplication {
         System.out.println("Radix sort cost time : " + (System.currentTimeMillis() - start));
     }
 
-    private static class A {
-        private String name;
+    static class Main {
 
-        public A(String name) {
-            this.name = name;
+        static int k;
+
+        synchronized void test() {
+            for (int i = 0; i < 1000; i++) {
+                k++;
+                System.out.println(Thread.currentThread().getName() + "Main k:" + k);
+            }
         }
+    }
 
-        public String getName() {
-            return name;
-        }
-
-        public A setName(String name) {
-            this.name = name;
-            return this;
+    static class Sub extends Main {
+        @Override
+        void test() {
+            for (int i = 0; i < 1000; i++) {
+                k++;
+                System.out.println(Thread.currentThread().getName() + "Sub k:" + k);
+            }
+            super.test();
         }
     }
 

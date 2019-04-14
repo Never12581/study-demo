@@ -32,6 +32,7 @@
         <module>sort-demo</module>
         <module>tree-demo</module>
         <module>netty-demo</module>
+        <module>design-demo</module>
     </modules>
 
 </project>

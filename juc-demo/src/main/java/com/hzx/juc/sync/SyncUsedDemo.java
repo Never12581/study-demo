@@ -50,7 +50,7 @@ public class SyncUsedDemo {
 
         public static synchronized void test() {
             for (int i = 0; i < 10; i++) {
-                logger.info(" B test : {}", i);
+                logger.info(" B readTest : {}", i);
             }
         }
 
@@ -73,7 +73,7 @@ public class SyncUsedDemo {
     static class A {
         public synchronized void test() {
             for (int i = 0; i < 10; i++) {
-                logger.info(" A test : {}", i);
+                logger.info(" A readTest : {}", i);
             }
         }
 
