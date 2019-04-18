@@ -15,7 +15,6 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -25,8 +24,18 @@ public class SortDemoApplication {
 
     private static Map<String, String> map = new HashMap<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        Class clazz = JobTest.class;
+        JobTest jobTest = new JobTest();
+        Class clazzz = jobTest.getClass();
+        System.out.println(clazz==clazzz);
+        System.out.println(JobTest.A);
+    }
 
+    /**
+     * InheritableThreadLocal 验证
+     */
+    public static void test11() {
         TestClass.threadLocal.set("哈哈哈哈");
 
         Thread t1 = new Thread(() -> {
@@ -287,21 +296,25 @@ public class SortDemoApplication {
     /**
      * FutureTask测试
      */
-    public static void test3() {
-        FutureTask<String> futureTask = new FutureTask<String>(() -> {
+    public static void test3() throws InterruptedException {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        Future<String> future = executorService.submit(() -> {
             System.out.println("进入futureTask！");
             sort();
             return "hhhh";
         });
-        ExecutorService executorService = Executors.newCachedThreadPool();
-        executorService.submit(futureTask);
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        for (int i = 0; i < 50; i++) {
+            executorService.execute(() -> {
+                sort_test();
+            });
         }
-        boolean flag = futureTask.cancel(true);
-        System.out.println("取消结果：" + flag);
+
+        for (int i = 0; i < 100; i++) {
+            boolean flag = future.cancel(true);
+            System.out.println("取消结果：" + flag);
+            Thread.sleep(100);
+        }
 
         executorService.shutdown();
     }
@@ -370,42 +383,92 @@ public class SortDemoApplication {
         System.out.println("线程池终止状态：" + flag);
     }
 
-    public static void sort() {
+    public static void sort() throws InterruptedException {
         System.out.println("==============Heap=============");
         int[] array = randomArray();
         long start = System.currentTimeMillis();
         HeapSort.sort(array);
         System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
+        for (int i = 0; i < 10000; i++) {
+            Thread.yield();
+            // Thread.sleep(0,1);
+        }
 
         System.out.println("==============Shell=============");
         array = randomArray();
         start = System.currentTimeMillis();
         ShellSort.sort(array);
         System.out.println("Shell sort cost time : " + (System.currentTimeMillis() - start));
+        for (int i = 0; i < 10000; i++) {
+            Thread.yield();
+            // Thread.sleep(0,1);
+        }
 
         System.out.println("==============Quick=============");
         array = randomArray();
         start = System.currentTimeMillis();
         QuickSort.sort(array, 0, array.length - 1);
         System.out.println("Quick sort cost time : " + (System.currentTimeMillis() - start));
+        for (int i = 0; i < 10000; i++) {
+            Thread.yield();
+            // Thread.sleep(0,1);
+        }
 
         System.out.println("==============Merge=============");
         array = randomArray();
         start = System.currentTimeMillis();
         MergeSort.sort(array, 0, array.length - 1);
         System.out.println("Merge sort cost time : " + (System.currentTimeMillis() - start));
+        for (int i = 0; i < 10000; i++) {
+            Thread.yield();
+            // Thread.sleep(0,1);
+        }
 
         System.out.println("==============Bucket=============");
         array = randomArray();
         start = System.currentTimeMillis();
         BucketSort.sort(array);
         System.out.println("Bucket sort cost time : " + (System.currentTimeMillis() - start));
+        for (int i = 0; i < 10000; i++) {
+            Thread.yield();
+            // Thread.sleep(0,1);
+        }
 
         System.out.println("==============Radix=============");
         array = randomArray();
         start = System.currentTimeMillis();
         RadixSort.lsdSort(array);
         System.out.println("Radix sort cost time : " + (System.currentTimeMillis() - start));
+        for (int i = 0; i < 10000; i++) {
+            Thread.yield();
+            // Thread.sleep(0,1);
+        }
+    }
+
+    public static void sort_test() {
+        int[] array = randomArray();
+        HeapSort.sort(array);
+        Thread.yield();
+
+        array = randomArray();
+        ShellSort.sort(array);
+        Thread.yield();
+
+        array = randomArray();
+        QuickSort.sort(array, 0, array.length - 1);
+        Thread.yield();
+
+        array = randomArray();
+        MergeSort.sort(array, 0, array.length - 1);
+        Thread.yield();
+
+        array = randomArray();
+        BucketSort.sort(array);
+        Thread.yield();
+
+        array = randomArray();
+        RadixSort.lsdSort(array);
+        Thread.yield();
     }
 
     static class Main {
