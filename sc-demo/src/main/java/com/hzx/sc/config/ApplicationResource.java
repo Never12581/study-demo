@@ -10,6 +10,6 @@ import java.util.concurrent.Executors;
  */
 public interface ApplicationResource {
 
-    ExecutorService RESOURCE = Executors.newCachedThreadPool();
+    ExecutorService RESOURCE = Executors.newFixedThreadPool(8);
 
 }
