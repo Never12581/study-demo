@@ -12,9 +12,20 @@ import java.util.concurrent.Future;
  */
 public class TestThreadPool {
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        // test();
-        System.out.println((1 <<29)-1);
+    public static void main(String[] args)  {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        Future f = executorService.submit(new MyThread());
+
+        try {
+            f.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        executorService.shutdown();
     }
 
     /**
@@ -56,6 +67,15 @@ public class TestThreadPool {
         Thread.sleep(1000);
 
         executorService.shutdown();
+    }
+
+    private static class MyThread implements Runnable {
+
+        @Override
+        public void run() {
+            throw new RuntimeException("我草");
+            // System.out.println("hhahaha");
+        }
     }
 
 }
