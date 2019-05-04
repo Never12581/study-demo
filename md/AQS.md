@@ -64,16 +64,7 @@ Cancellation introduces some conservatism to the basic algorithms.  Since we mus
 
 ## 源码分析
 
-- CANCELLED，值为1 。场景：当该线程等待超时或者被中断，需要从同步队列中取消等待，则该线程被置1，即被取消（这里该线程在取消之前是等待状态）。节点进入了取消状态则不再变化
-
-- SIGNAL，值为-1。场景：后继的节点处于等待状态，当前节点的线程如果释放了同步状态或者被取消（当前节点状态置为-1），将会通知后继节点，使后继节点的线程得以运行
-
-- CONDITION，值为-2。场景：节点处于等待队列中，节点线程等待在Condition上，当其他线程对Condition调用了signal()方法后，该节点从等待队列中转移到同步队列中，加入到对同步状态的获取中
-
-- PROPAGATE，值为-3。场景：表示下一次的共享状态会被无条件的传播下去
-
-- INITIAL，值为0，初始状态。
-
+### Node.class
 ```java
 static final class Node {
     /** 共享模式 */
@@ -85,109 +76,48 @@ static final class Node {
     static final int CANCELLED =  1;
     /** 后继节点处于等待队列中，当前节点线程如果释放了锁，或被取消了，则会通知后继即诶单，使后继节点线程运行 */
     static final int SIGNAL    = -1;
-    /** waitStatus value to indicate thread is waiting on condition */
+    /** 节点处于等待队列中，节点线程等待在Condition上，当其他线程对Condition调用了signal()方法后，该节点从等待队列中转移到同步队列中，加入到对同步状态的获取中 */
     static final int CONDITION = -2;
-    /**
-     * waitStatus value to indicate the next acquireShared should
-     * unconditionally propagate
-     */
+    /** 表示下一次的共享状态会被无条件的传播下去 */
     static final int PROPAGATE = -3;
 
     /**
-     * Status field, taking on only the values:
-     *   SIGNAL:     The successor of this node is (or will soon be)
-     *               blocked (via park), so the current node must
-     *               unpark its successor when it releases or
-     *               cancels. To avoid races, acquire methods must
-     *               first indicate they need a signal,
-     *               then retry the atomic acquire, and then,
-     *               on failure, block.
-     *   CANCELLED:  This node is cancelled due to timeout or interrupt.
-     *               Nodes never leave this state. In particular,
-     *               a thread with cancelled node never again blocks.
-     *   CONDITION:  This node is currently on a condition queue.
-     *               It will not be used as a sync queue node
-     *               until transferred, at which time the status
-     *               will be set to 0. (Use of this value here has
-     *               nothing to do with the other uses of the
-     *               field, but simplifies mechanics.)
-     *   PROPAGATE:  A releaseShared should be propagated to other
-     *               nodes. This is set (for head node only) in
-     *               doReleaseShared to ensure propagation
-     *               continues, even if other operations have
-     *               since intervened.
-     *   0:          None of the above
-     *
-     * The values are arranged numerically to simplify use.
-     * Non-negative values mean that a node doesn't need to
-     * signal. So, most code doesn't need to check for particular
-     * values, just for sign.
-     *
-     * The field is initialized to 0 for normal sync nodes, and
-     * CONDITION for condition nodes.  It is modified using CAS
-     * (or when possible, unconditional volatile writes).
+     * 节点状态，也就是以上 CANCELLED，SIGNAL，CONDITION，PROPAGATE，以及0（初始值）
+     * 对于普通节点，初始值为0
+     * 对于条件节点，初始值为 -2 CONDITION
+     * 对于当前值的修改需要使用CAS
      */
     volatile int waitStatus;
 
     /**
-     * Link to predecessor node that current node/thread relies on
-     * for checking waitStatus. Assigned during enqueuing, and nulled
-     * out (for sake of GC) only upon dequeuing.  Also, upon
-     * cancellation of a predecessor, we short-circuit while
-     * finding a non-cancelled one, which will always exist
-     * because the head node is never cancelled: A node becomes
-     * head only as a result of successful acquire. A
-     * cancelled thread never succeeds in acquiring, and a thread only
-     * cancels itself, not any other node.
+     * 前置节点
      */
     volatile Node prev;
 
     /**
-     * Link to the successor node that the current node/thread
-     * unparks upon release. Assigned during enqueuing, adjusted
-     * when bypassing cancelled predecessors, and nulled out (for
-     * sake of GC) when dequeued.  The enq operation does not
-     * assign next field of a predecessor until after attachment,
-     * so seeing a null next field does not necessarily mean that
-     * node is at end of queue. However, if a next field appears
-     * to be null, we can scan prev's from the tail to
-     * double-check.  The next field of cancelled nodes is set to
-     * point to the node itself instead of null, to make life
-     * easier for isOnSyncQueue.
+     * 后置节点，后置节点为null不代表它就是最后一个节点（原因请见enq方法）
      */
     volatile Node next;
 
     /**
-     * The thread that enqueued this node.  Initialized on
-     * construction and nulled out after use.
+     * 当前节点包含的线程
      */
     volatile Thread thread;
 
     /**
-     * Link to next node waiting on condition, or the special
-     * value SHARED.  Because condition queues are accessed only
-     * when holding in exclusive mode, we just need a simple
-     * linked queue to hold nodes while they are waiting on
-     * conditions. They are then transferred to the queue to
-     * re-acquire. And because conditions can only be exclusive,
-     * we save a field by using special value to indicate shared
-     * mode.
+     * 等待队列（非同步队列）的后继节点。如果当前节点是共享的，那么这个字段将是一个SHARED常量
      */
     Node nextWaiter;
 
     /**
-     * Returns true if node is waiting in shared mode.
+     * 返回是否是共享模式
      */
     final boolean isShared() {
         return nextWaiter == SHARED;
     }
 
     /**
-     * Returns previous node, or throws NullPointerException if null.
-     * Use when predecessor cannot be null.  The null check could
-     * be elided, but is present to help the VM.
-     *
-     * @return the predecessor of this node
+     * 查看当前节点的前置节点
      */
     final Node predecessor() throws NullPointerException {
         Node p = prev;
@@ -210,4 +140,99 @@ static final class Node {
         this.thread = thread;
     }
 }
+```
+
+### AQS部分源码
+```java
+public abstract class AbstractQueuedSynchronizer
+    extends AbstractOwnableSynchronizer
+    implements java.io.Serializable {
+    /**
+     * 同步队列中头节点
+     */
+    private transient volatile Node head;
+    
+    /**
+     * 同步队列中尾节点
+     */
+    private transient volatile Node tail;
+    
+    /**
+     * 信号量
+     */
+    private volatile int state;
+    
+    /**
+     * 获取当前信号量的值
+     */
+    protected final int getState() {
+        return state;
+    }
+    
+    /**
+     * 设置信号量的值
+     */
+    protected final void setState(int newState) {
+        state = newState;
+    }
+    
+    /**
+     * CAS修改信号量的值
+     */
+    protected final boolean compareAndSetState(int expect, int update) {
+        // See below for intrinsics setup to support this
+        return unsafe.compareAndSwapInt(this, stateOffset, expect, update);
+    }
+    
+    // 
+    static final long spinForTimeoutThreshold = 1000L;
+    
+    /**
+     * 入队操作
+     * @param node the node to insert
+     * @return node's predecessor
+     */
+    private Node enq(final Node node) {
+        for (;;) {
+            Node t = tail;
+            if (t == null) { // 尾节点为空，则初始化节点
+                // 设置一个空的首节点，不使用
+                if (compareAndSetHead(new Node()))
+                    tail = head;
+            } else {
+                // 将当前节点的前置节点置为 t 也就是尾节点
+                node.prev = t;
+                // 通过CAS，将尾节点的后置节点设置为当前节点，如果不成功则自选再来一次
+                // 这里也就是前面说的节点的next为空，并不代表其为尾节点
+                if (compareAndSetTail(t, node)) {
+                    t.next = node;
+                    return t;
+                }
+            }
+        }
+    }
+    
+    /**
+     * 创建给定节点并入队
+     *
+     * @param mode Node.EXCLUSIVE for exclusive, Node.SHARED for shared
+     * @return the new node
+     */
+    private Node addWaiter(Node mode) {
+        Node node = new Node(Thread.currentThread(), mode);
+        // 先尝试直接链到tail后面
+        Node pred = tail;
+        if (pred != null) {
+            node.prev = pred;
+            if (compareAndSetTail(pred, node)) {
+                pred.next = node;
+                return node;
+            }
+        }
+        // 失败后老老实实入队
+        enq(node);
+        return node;
+    }
+}
+
 ```
