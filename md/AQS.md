@@ -59,10 +59,26 @@ AQS提供一个框架，用于实现依赖先进先出（FIFO）等待队列的�
 
 Cancellation introduces some conservatism to the basic algorithms.  Since we must poll for cancellation of other nodes, we can miss noticing whether a cancelled node is ahead or behind us. This is dealt with by always unparking successors upon cancellation, allowing them to stabilize on a new predecessor, unless we can identify an uncancelled predecessor who will carry this responsibility.
 
-
 ---
 
 ## 源码分析
+
+### 独占锁与共享锁方法实现对比
+
+**独占锁** |释义| **共享锁** | 释义
+---|---|---|---
+tryAcquire(int arg) |获取独占锁|	tryAcquireShared(int arg) | 获取共享锁
+tryAcquireNanos(int arg, long nanosTimeout)|以独占模式获取锁，如果当前线程被中断则终止。先获取一次锁，如果没有获取到锁，则自选去获取，如果超过指定时间后未获取到锁则返回失败。	| tryAcquireSharedNanos(int arg, long nanosTimeout) |以共享模式获取锁，如果当前线程被中断则终止。先获取一次锁，如果没有获取到锁，则自选去获取，如果超过指定时间后未获取到锁则返回失败。
+acquire(int arg)|	| acquireShared(int arg)|
+acquireQueued(final Node node, int arg)|	doAcquireShared(int arg)
+acquireInterruptibly(int arg)|	acquireSharedInterruptibly(int arg)
+doAcquireInterruptibly(int arg)|	doAcquireSharedInterruptibly(int arg)
+doAcquireNanos(int arg, long nanosTimeout)|	doAcquireSharedNanos(int arg, long nanosTimeout)
+release(int arg)|	releaseShared(int arg)
+tryRelease(int arg)|	tryReleaseShared(int arg)
+-|	doReleaseShared()
+
+
 
 ### Node.class
 ```java
@@ -74,7 +90,7 @@ static final class Node {
 
     /** waitStatus 的取消状态。节点在进入取消状态则不再改变 */
     static final int CANCELLED =  1;
-    /** 后继节点处于等待队列中，当前节点线程如果释放了锁，或被取消了，则会通知后继即诶单，使后继节点线程运行 */
+    /** 后继节点处于等待队列中，当前节点线程如果释放了锁，或被取消了，则会通知后继节点，使后继节点线程运行 */
     static final int SIGNAL    = -1;
     /** 节点处于等待队列中，节点线程等待在Condition上，当其他线程对Condition调用了signal()方法后，该节点从等待队列中转移到同步队列中，加入到对同步状态的获取中 */
     static final int CONDITION = -2;
@@ -233,6 +249,39 @@ public abstract class AbstractQueuedSynchronizer
         enq(node);
         return node;
     }
+    
+    /**
+     * 如果存在后继节点，则唤醒后继节点
+     */
+    private void unparkSuccessor(Node node) {
+        /*
+         * 修改当前节点的waitStatus
+         * 调用当前方法的地方都是对当前节点释放锁了
+         * 所以此处可以直接将节点状态改为0，
+         * 失败代表这其他线程已经将其置为0，比如，当前线程执行完毕的同时关闭线程池，就会造成这里的cas失败。
+         */
+        int ws = node.waitStatus;
+        if (ws < 0)
+            compareAndSetWaitStatus(node, ws, 0);
+
+        /*
+         * 先从后继找，如果后继为null，则从tail节点开始往前找
+         * 找到实际需要被唤醒的节点。
+         */
+        Node s = node.next;
+        if (s == null || s.waitStatus > 0) {
+            s = null;
+            for (Node t = tail; t != null && t != node; t = t.prev)
+                if (t.waitStatus <= 0)
+                    s = t;
+        }
+        if (s != null)
+            // 底层调用unsafe唤醒线程
+            LockSupport.unpark(s.thread);
+    }
+    
+    
+    
 }
 
 ```
