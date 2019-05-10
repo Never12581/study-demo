@@ -1,5 +1,6 @@
 package com.hzx.juc.lock;
 
+import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -13,6 +14,25 @@ public class TestReentrantReadWriteLock {
     private static ReadWriteLock lock = new ReentrantReadWriteLock();
 
     public static void main(String[] args) throws InterruptedException {
+       Thread t = new Thread(()->{
+           try {
+               System.out.println("try");
+               LockSupport.park();
+               System.out.println("park之后");
+           } finally {
+               System.out.println("finally");
+           }
+       });
+
+       t.start();
+
+       Thread.sleep(1000);
+
+       LockSupport.unpark(t);
+
+    }
+
+    public static void testFor() throws InterruptedException {
         // ================读锁测试================
         // new Thread(()->{
         //     readTest();
@@ -53,7 +73,6 @@ public class TestReentrantReadWriteLock {
         // new Thread(()->{
         //     writeTest();
         // }).start();
-
     }
 
     public static void readTest() {
