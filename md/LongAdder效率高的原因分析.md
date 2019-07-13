@@ -33,14 +33,14 @@
        * 类使用@Contended修饰，防止伪共享现象出现（在启动命令中加上-XX:-RestrictContended才会生效）
        * 
        * 伪共享：
-  		 *		1、在java中使用volatile修饰的对象保证了可见性，
-  		 *		2、cpu在将内存中的数据读取到cpu缓存中使用的是cacheline（64B）的策略（时间局部性、空间局部性）
-  		 * 		3、数组时连续的内存块。
-  		 *		4、long类型占据8B。
-  		 *		当两个线程将相邻的两个cell对象以同个cacheline加载进不同的cpu高速缓存，
-  		 *		其中一个线程将一个cell（A）对象进行了更新，
-  		 *		此时另一个线程对cell（B）进行更新，却发现当前对象所在的cacheline是脏的，
-  		 *		需要重新从内存中加载这个cacheline，造成耗时。
+       *		1、在java中使用volatile修饰的对象保证了可见性，
+       *		2、cpu在将内存中的数据读取到cpu缓存中使用的是cacheline（64B）的策略（时间局部性、空间局部性）
+       * 		3、数组时连续的内存块。
+       *		4、long类型占据8B。
+       *		当两个线程将相邻的两个cell对象以同个cacheline加载进不同的cpu高速缓存，
+       *		其中一个线程将一个cell（A）对象进行了更新，
+       *		此时另一个线程对cell（B）进行更新，却发现当前对象所在的cacheline是脏的，
+       *		需要重新从内存中加载这个cacheline，造成耗时。
        */
       @sun.misc.Contended static final class Cell {
             volatile long value;
