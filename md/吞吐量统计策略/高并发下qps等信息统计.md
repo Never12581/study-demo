@@ -1,10 +1,10 @@
-### 高并发下QPS，TPS，RT等信息统计
+## 高并发下QPS，TPS，RT等信息统计
 
 ##### 在目前的大背景下，并发量的高低与经济效益直接挂钩，所以如何在使服务更稳定，能接受更高的吞吐量是当前热议的一个话题。故，本次分享的内容是在高并发下的QPS，TPS，RT等信息的统计。
 
 
 
-#### 如何保证数据的正确性
+### 如何保证数据的正确性
 
 - 加锁阻塞（Lock）
 
@@ -24,7 +24,23 @@
 
   ​	缺点：相比于以上两种方式，占用内存多，空间复杂度高
 
-##### LongAdder与AtomicInteger效率对比
+##### LongAdder与AtomicInteger在高并发下效率对比
 
 [传送门](https://github.com/Never12581/study-demo/blob/master/md/LongAdder与AtomicLong速度对比.md)
+
+##### LongAdder源码分析
+
+[传送门](https://github.com/Never12581/study-demo/blob/master/md/LongAdder源码分析.md)
+
+### 如何保证数据的可靠性
+
+- 滑动窗口算法
+
+  ​	这里描述的并非是tcp协议中的滑动窗口算法。这里的滑动窗口算法是指，将数据统计单位分的更小，在某个时刻去查看单位时间吞吐量会更为符合标准，也就是更可靠。简单来说，对于数据的采样越多，数据的可靠性越高。
+
+##### Sentinel中滑动窗口实现
+
+##### Hystrix中滑动窗口实现
+
+
 
