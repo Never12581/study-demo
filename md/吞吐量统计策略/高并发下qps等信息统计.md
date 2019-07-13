@@ -30,7 +30,7 @@
 
 ##### LongAdder源码分析
 
-[传送门]([https://github.com/Never12581/study-demo/blob/master/md/吞吐量统计策略/LongAdder源码分析.md.md])
+[传送门]([https://github.com/Never12581/study-demo/blob/master/md/吞吐量统计策略/LongAdder源码分析.md])
 
 ### 如何保证数据的可靠性
 
@@ -39,10 +39,9 @@
   ​	这里描述的并非是tcp协议中的滑动窗口算法。这里的滑动窗口算法是指，将数据统计单位分的更小，在某个时刻去查看单位时间吞吐量会更为符合标准，也就是更可靠。简单来说，对于数据的采样越多，数据的可靠性越高。
 
 ##### Sentinel中滑动窗口实现
-
-[传送门](https://github.com/Never12581/study-demo/blob/master/md/吞吐量统计策略/Hystrix中滑动窗口的实现.md)
+[传送门](https://github.com/Never12581/study-demo/blob/master/md/吞吐量统计策略/sentinel中滑动窗口的实现.md)
 
 ##### Hystrix中滑动窗口实现
+[传送门](https://github.com/Never12581/study-demo/blob/master/md/吞吐量统计策略/Hystrix中滑动窗口的实现.md)
 
-[传送门](https://github.com/Never12581/study-demo/blob/master/md/吞吐量统计策略/sentinel中滑动窗口的实现.md)
 
