@@ -26,5 +26,5 @@
 
 ##### LongAdder与AtomicInteger效率对比
 
-详见：com.miya.huihua.hystrixdemo.LongAddrAndAtomicLongTest
+[传送门](https://github.com/Never12581/study-demo/blob/master/md/LongAdder与AtomicLong速度对比.md)
 
