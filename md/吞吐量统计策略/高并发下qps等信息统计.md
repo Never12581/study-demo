@@ -40,7 +40,9 @@
 
 ##### Sentinel中滑动窗口实现
 
+[传送门](https://github.com/Never12581/study-demo/blob/master/md/吞吐量统计策略/Hystrix中滑动窗口的实现.md)
+
 ##### Hystrix中滑动窗口实现
 
-
+[传送门](https://github.com/Never12581/study-demo/blob/master/md/吞吐量统计策略/sentinel中滑动窗口的实现.md)
 
