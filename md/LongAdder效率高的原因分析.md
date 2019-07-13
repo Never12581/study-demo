@@ -252,37 +252,38 @@
 
 ```java
 public class LongAdder extends Striped64 implements Serializable {
-    
+
     public void add(long x) {
-        Cell[] as; 
-        long b, v; 
-        int m; 
+        Cell[] as;
+        long b, v;
+        int m;
         Cell a;
         // 如果cell数组不为空------->为空为false，不为空为true
         // 或者对主数据（base）进行cas失败，则进行以下方法体
-        if ((as = cells) != null 
-            || !casBase(b = base, b + x)) {
-          
+        if ((as = cells) != null
+                || !casBase(b = base, b + x)) {
+
             boolean uncontended = true;
-          	// 如果as即当前对象的cell数组为空
+            // 如果as即当前对象的cell数组为空
             // 或者cell数组长度小于1
             // 或者cell数组中，当前线程所落的桶中的对象（a）为null
             // 或者对a进行cas失败（此时uncontended对象为false）则进行以下方法体
-            if (as == null 
-								|| (m = as.length - 1) < 0 
-								|| (a = as[getProbe() & m]) == null 
-								|| !(uncontended = a.cas(v = a.value, v + x))
-               )
-              	// 该方法解决 数组的初始化，扩容，在桶内对象初始化，桶内cas失败
+            if (as == null
+                    || (m = as.length - 1) < 0
+                    || (a = as[getProbe() & m]) == null
+                    || !(uncontended = a.cas(v = a.value, v + x))
+                    )
+                // 该方法解决 数组的初始化，扩容，在桶内对象初始化，桶内cas失败
                 longAccumulate(x, null, uncontended);
         }
     }
 
-  	/**
-  	 * 	计算当前对象的值，即将基值base，加上数组中所有cell的和
-  	 */
+    /**
+     * 计算当前对象的值，即将基值base，加上数组中所有cell的和
+     */
     public long sum() {
-        Cell[] as = cells; Cell a;
+        Cell[] as = cells;
+        Cell a;
         long sum = base;
         if (as != null) {
             for (int i = 0; i < as.length; ++i) {
@@ -294,6 +295,5 @@ public class LongAdder extends Striped64 implements Serializable {
     }
 
 }
-
 ```
 
