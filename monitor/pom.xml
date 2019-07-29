@@ -7,26 +7,20 @@
         <artifactId>study</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.hzx.sc</groupId>
-    <artifactId>sc-demo</artifactId>
+    <groupId>com.hzx.monitor</groupId>
+    <artifactId>monitor</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>sc-demo</name>
-    <description>Demo project for Spring Boot</description>
+    <name>monitor</name>
+    <description>监控服务</description>
 
     <properties>
         <java.version>1.8</java.version>
     </properties>
 
-
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
 
         <dependency>
@@ -40,28 +34,15 @@
         </dependency>
 
         <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>3.11</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>3.11</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.hzx.sort</groupId>
-            <artifactId>sort-demo</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
 
     <build>
