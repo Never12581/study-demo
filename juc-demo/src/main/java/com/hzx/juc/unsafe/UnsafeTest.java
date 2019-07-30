@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 public class UnsafeTest {
 
     private static final long BASE;
+    private static final long SECOND;
     private static final Unsafe U;
 
     static {
@@ -22,6 +23,7 @@ public class UnsafeTest {
 
             Class<UnsafeTest> u = UnsafeTest.class;
             BASE = U.objectFieldOffset(u.getDeclaredField("base"));
+            SECOND = U.objectFieldOffset(u.getDeclaredField("second"));
 
         } catch (Exception e) {
             throw new Error(e);
@@ -31,9 +33,11 @@ public class UnsafeTest {
 
     private volatile long base = 0;
 
+    private volatile long second = 1 ;
+
     public static void main(String[] args) {
-        UnsafeTest unsafeTest = new UnsafeTest();
-        unsafeTest.test(0L, 4L);
+        System.out.println(BASE);
+        System.out.println(SECOND);
 
     }
 

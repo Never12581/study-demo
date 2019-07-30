@@ -33,36 +33,6 @@ public class SortDemoApplication {
     }
 
     /**
-     * InheritableThreadLocal 验证
-     */
-    public static void test11() {
-        TestClass.threadLocal.set("哈哈哈哈");
-
-        Thread t1 = new Thread(() -> {
-            for (int i = 0; i < 10; i++) {
-                int finalI = i;
-                System.out.println("第 （" + finalI + "） 次in sub thread  -----> " + TestClass.threadLocal.get());
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-
-                }
-            }
-        });
-
-        t1.start();
-
-        try {
-            Thread.sleep(10);
-            TestClass.threadLocal.set("nonononono");
-            t1.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        TestClass.threadLocal.remove();
-    }
-
-    /**
      * wait / notify 测试
      * 为验证，当前线程仅仅wait，其他线程会不会获取到锁
      */
