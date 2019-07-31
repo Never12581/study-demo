@@ -38,6 +38,7 @@
         <module>design-demo</module>
         <module>Leetcode</module>
         <module>data</module>
+        <module>monitor</module>
     </modules>
 
     <dependencyManagement>

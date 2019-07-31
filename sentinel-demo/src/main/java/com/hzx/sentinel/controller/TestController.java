@@ -1,6 +1,5 @@
 package com.hzx.sentinel.controller;
 
-import com.hzx.beans.result.BaseResult;
 import com.hzx.sentinel.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
