@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Resource;
 import java.lang.reflect.Method;
 
 /**
@@ -18,6 +19,9 @@ import java.lang.reflect.Method;
 public class MonitorExecuteAspect {
 
     private final static Logger logger = LoggerFactory.getLogger(MonitorExecuteAspect.class);
+
+    @Resource
+    private MailService mailService;
 
     @AfterThrowing(pointcut = "@annotation(com.hzx.monitor.annoation.MonitorResource)", throwing = "exception")
     public void execute(JoinPoint point, Exception exception) {
@@ -40,11 +44,11 @@ public class MonitorExecuteAspect {
 
         monitorResource = method.getAnnotation(MonitorResource.class);
 
-        if(monitorResource == null) {
+        if (monitorResource == null) {
             return;
         }
 
-        // 此处异步执行吗？进行异常信息的统计
+        mailService.sendMail(exception.getClass().getSimpleName(), exception.getLocalizedMessage());
 
     }
 

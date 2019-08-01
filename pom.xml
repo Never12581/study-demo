@@ -57,6 +57,12 @@
                 <version>2.6</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>1.14</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
