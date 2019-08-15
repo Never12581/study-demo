@@ -72,7 +72,7 @@
 
 为解决2.8版本之前，断线重新同步的低效问题，2.8版本开始使用psync命令代替sync命令执行复制时的同步操作。
 
-psync命令具有**完整重同步（full resynchronization）** 和**部分重同步（partial resynchronization）**两种模式：
+psync命令具有**完整重同步(full resynchronization)** 和**部分重同步(partial resynchronization)**两种模式：
 
 - 完整重同步 用于初次复制 时的情况，执行步骤与sync命令基本一致
 - 部分重同步 用于处理断线后重新复制的情况，如果条件允许，主服务器将断开连接期间执行的写命令发送给从服务器，从服务器接收并执行这些写命令，将从服务器状态更新至与主服务器一致
@@ -152,8 +152,8 @@ psync命令具有**完整重同步（full resynchronization）** 和**部分重�
 #### psync命令实现
 
 ```flow
-st=>start: Start
-e=>end
+st=>start: 开始
+e=>end: 结束
 op=>operation: 从服务器接收到客户端发来的slaveof命令
 cond=>condition: 这是从服务器第一次进行复制？
 isFirst=>operation: 向主服务器发送 psync ? -1 
