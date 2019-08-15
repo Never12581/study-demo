@@ -151,6 +151,8 @@ psync命令具有**完整重同步(full resynchronization)** 和**部分重同�
 
 #### psync命令实现
 
+![psync命令实现流程图]([https://github.com/Never12581/study-demo/blob/master/other-file/picture/psync%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg](https://github.com/Never12581/study-demo/blob/master/other-file/picture/psync执行流程图.jpg))
+
 ```flow
 st=>start: 开始
 e=>end: 结束
