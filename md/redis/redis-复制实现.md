@@ -152,7 +152,7 @@ psync命令具有**完整重同步(full resynchronization)** 和**部分重同�
 
 #### psync命令实现
 
-![psync命令实现流程图](https://github.com/Never12581/study-demo/blob/master/other-file/picture/psync%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg?raw=true)
+![psync命令实现流程图](https://github.com//Never12581/study-demo/blob/master/other-file/picture/%E5%A4%8D%E5%88%B6-psync%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg?raw=true)
 
 ```flow
 st=>start: 开始
@@ -224,6 +224,8 @@ slaveof命令是一个异步命令，在完成两个属性的赋值后，从服�
 
 - 如果从服务器读取到“pong”回复，那么表示主从服务器之间的网络连接状态正常，并且主服务器能正常处理从服务器（客户端）发送的命令请求。这种情况下可以执行复制的下个步骤
 
+![ping命令实现流程图](https://github.com/Never12581/study-demo/blob/master/other-file/picture/%E5%A4%8D%E5%88%B6-%E5%8F%91%E9%80%81ping%E5%91%BD%E4%BB%A4%E6%B5%81%E7%A8%8B.jpg?raw=true)
+
 #### 步骤四：身份验证
 
 从服务器在收到主服务器返回的“pong”回复之后，下一步要做的就是决定是否进行身份验证：
@@ -251,6 +253,8 @@ struct redisServer {
 - 如果主服务器没有设置requirepass选项，而从服务器设置了masterauth选项，那么主服务器将返回一个“no password is set ”错误
 
 所有的错误情况都会令从服务器中止当前的复制工作，并从创建套接字开始重新执行复制，知道身份验证通过，或者从服务器放弃执行复制为止。
+
+![身份验证实现流程图](https://github.com/Never12581/study-demo/blob/master/other-file/picture/%E5%A4%8D%E5%88%B6-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E6%B5%81%E7%A8%8B.jpg?raw=true)
 
 #### 步骤五：发送端口信息
 
