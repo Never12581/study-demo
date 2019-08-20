@@ -30,40 +30,40 @@ public class PAndC {
                 e.printStackTrace();
             }
         }).start();
-        // new Thread(() -> {
-        //     try {
-        //         while (true) {
-        //             synchronized (lock) {
-        //                 if (value.equals("")) {
-        //                     lock.wait();
-        //                 }else {
-        //                     System.out.println(Thread.currentThread().getName() + " 【get】 value: " + value);
-        //                     value = "";
-        //                 }
-        //                 lock.notify();
-        //             }
-        //         }
-        //     } catch (InterruptedException e) {
-        //         e.printStackTrace();
-        //     }
-        // }).start();
-        // new Thread(() -> {
-        //     try {
-        //         while (true) {
-        //             synchronized (lock) {
-        //                 if (value.equals("")) {
-        //                     lock.wait();
-        //                 }else {
-        //                     System.out.println(Thread.currentThread().getName() + " 【get】 value: " + value);
-        //                     value = "";
-        //                 }
-        //                 lock.notify();
-        //             }
-        //         }
-        //     } catch (InterruptedException e) {
-        //         e.printStackTrace();
-        //     }
-        // }).start();
+         new Thread(() -> {
+             try {
+                 while (true) {
+                     synchronized (lock) {
+                         if (value.equals("")) {
+                             lock.wait();
+                         }else {
+                             System.out.println(Thread.currentThread().getName() + " 【get】 value: " + value);
+                             value = "";
+                         }
+                         lock.notify();
+                     }
+                 }
+             } catch (InterruptedException e) {
+                 e.printStackTrace();
+             }
+         }).start();
+         new Thread(() -> {
+             try {
+                 while (true) {
+                     synchronized (lock) {
+                         if (value.equals("")) {
+                             lock.wait();
+                         }else {
+                             System.out.println(Thread.currentThread().getName() + " 【get】 value: " + value);
+                             value = "";
+                         }
+                         lock.notify();
+                     }
+                 }
+             } catch (InterruptedException e) {
+                 e.printStackTrace();
+             }
+         }).start();
 
         new Thread(() -> {
             try {
@@ -72,7 +72,7 @@ public class PAndC {
                         if(!value.equals("")) {
                             lock.wait();
                         }
-                        value = System.currentTimeMillis()+"";
+                        value = System.nanoTime()+"";
                         System.out.println(Thread.currentThread().getName() + " 【set】 value: " + value);
                         lock.notifyAll();
                         // Thread.yield();
@@ -91,7 +91,7 @@ public class PAndC {
                         if(!value.equals("")) {
                             lock.wait();
                         }
-                        value = System.currentTimeMillis()+"";
+                        value = System.nanoTime()+"";
                         System.out.println(Thread.currentThread().getName() + " 【set】 value: " + value);
                         lock.notifyAll();
                         // Thread.yield();
@@ -109,7 +109,7 @@ public class PAndC {
                         if(!value.equals("")) {
                             lock.wait();
                         }
-                        value = System.currentTimeMillis()+"";
+                        value = System.nanoTime()+"";
                         System.out.println(Thread.currentThread().getName() + " 【set】 value: " + value);
                         lock.notifyAll();
                         // Thread.yield();
