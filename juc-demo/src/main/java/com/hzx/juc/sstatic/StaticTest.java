@@ -9,9 +9,14 @@ public class StaticTest {
 
     public static void main(String[] args) {
         // Singleton singleton = Singleton.getInstance();
-        System.out.println("=========");
-        System.out.println(Singleton.value1);
-        System.out.println(Singleton.value2);
+//        System.out.println("=========");
+//        System.out.println(Singleton.value1);
+//        System.out.println(Singleton.value2);
+        System.out.println(new ChildObject());
+
+
+        System.out.println(ChildObject.class);
+        System.out.println(ParentObject.class);
     }
 
 }
