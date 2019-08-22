@@ -20,7 +20,10 @@ public class WaitAndSleep {
      * @param args
      */
     public static void main(String[] args) {
-        test();
+//        test1();
+        long l = Math.round(-15.61);
+        System.out.println(l);
+        // -16
     }
 
     public static void test() {
@@ -31,6 +34,7 @@ public class WaitAndSleep {
                     while (i >= 0) {
                         if (i % 5 == 0) {
                             System.out.println(Thread.currentThread().getName() + " 此时是5的倍数 i:" + i);
+                            Thread.sleep(1000L);
                             o.wait();
                         }
                         o.notify();
@@ -48,6 +52,7 @@ public class WaitAndSleep {
                         i--;
                         if (i % 5 != 0) {
                             System.out.println(Thread.currentThread().getName() + " 此时不是5的倍数 i:" + i);
+                            Thread.sleep(1000L);
                         } else {
                             o.wait();
                         }
@@ -74,7 +79,7 @@ public class WaitAndSleep {
                             System.out.println(Thread.currentThread().getName() + " 此时是3的倍数 i:" + i);
                             o.wait();
                         }
-                        o.notify();
+                        o.notifyAll();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -94,7 +99,7 @@ public class WaitAndSleep {
                         } else {
                             o.wait();
                         }
-                        o.notify();
+                        o.notifyAll();
 
                     }
                 } catch (InterruptedException e) {
