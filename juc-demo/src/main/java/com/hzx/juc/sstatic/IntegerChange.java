@@ -23,5 +23,6 @@ public class IntegerChange {
         Field field = Integer.class.getDeclaredField("value");
         field.setAccessible(true);
         field.set(i, value);
+        IntegerChange.class.getClassLoader();
     }
 }
