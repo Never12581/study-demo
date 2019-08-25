@@ -24,23 +24,27 @@ public class HashMapTest {
     }
 
     public static void main(String[] args) {
-        // new Thread(() -> {
-        //
-        //     for (int i = 9; i < 81; i++) {
-        //         List<Integer> tempList = list;
-        //         tempList.add(i);
-        //         list = tempList;
-        //     }
-        // }).start();
-        //
-        // new Thread(() -> {
-        //     for (Integer i : list) {
-        //         System.out.println(i);
-        //     }
-        // }).start();
+        // String s = "adsfsasdfzxcvadf156as4d6f5aadf4s65df4a";
+        String s = "a";
+        int length = 8 ;
+        System.out.println("hash:"+hash(s));
+        System.out.println("map中的下标 "+calcuIndex(hash(s),length) ) ;
+        System.out.println("hash & oldTabl " + (hash(s)& 8));
+        System.out.println("=================================");
+        length = 8 << 1 ;
+        System.out.println("hash:"+hash(s));
+        System.out.println("新map中的下标 "+calcuIndex(hash(s),length) );
+        System.out.println("hash & oldTabl " + (hash(s)& 8));
 
-        System.out.println(1&0);
+    }
 
+    static final int calcuIndex(int hash , int length) {
+        return (length - 1) & hash;
+    }
+
+    static final int hash(Object key) {
+        int h;
+        return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
     }
 
 }
