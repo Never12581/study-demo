@@ -95,7 +95,25 @@ static class ThreadLocalMap {
 }
 ```
 
-其实这样看，是不会出现问题的！因为核心的Entry是一个虚引用，会被回收。
+其实这样看，是不会出现问题的！因为核心的Entry是一个虚引用，会被回收。ThreadLocal在ThreadLocalMap中是以一个弱引用身份被Entry中的Key引用的，因此如果ThreadLocal没有外部强引用来引用它，那么ThreadLocal会在下次JVM垃圾收集时被回收。这个时候就会出现Entry中Key已经被回收，出现一个null Key的情况，外部读取ThreadLocalMap中的元素是无法通过null Key来找到Value的。因此如果当前线程的生命周期很长，一直存在，那么其内部的ThreadLocalMap对象也一直生存下来，这些null key就存在一条强引用链的关系一直存在：Thread --> ThreadLocalMap-->Entry-->Value，这条强引用链会导致Entry不会回收，Value也不会回收，但Entry中的Key却已经被回收的情况，造成内存泄漏。
 
-但是问题是，现在多数都是多线程的服务，如果你不清理当前线程使用的ThreadLocalMap，那么在一个线程，也能得到它，没错，恐怖吧。
+但是JVM团队已经考虑到这样的情况，并做了一些措施来保证ThreadLocal尽量不会内存泄漏：在ThreadLocal的get()、set()、remove()方法调用的时候会清除掉线程ThreadLocalMap中所有Entry中Key为null的Value，并将整个Entry设置为null，利于下次内存回收。
 
+还有问题是，现在多数都是多线程的服务，如果你不清理当前线程使用的ThreadLocalMap，那么在一个线程，也能得到它，没错，恐怖吧。
+
+
+
+### 总结
+
+- 在当前线程池的背景下，如果使用ThreadLocal不进行清理，那么当前线程在下一个任务中能得到上个任务存入ThreadLocal中的值
+- 使用static的ThreadLocal，延长了ThreadLocal的生命周期，可能导致的内存泄漏。分配使用了ThreadLocal又不再调用get()、set()、remove()方法，那么就会导致内存泄漏。
+
+### 问题
+
+1. ThreadLocal.ThreadLocalMap.Entry，是一个虚引用，会在下次GC时被回收，这样线程就无法正常的get到存入ThreadLocal中的值，造成线程问题怎么办？
+
+   答：在实际情况中使用ThreadLocal，一般都是以上述TConstants类的形式来使用ThreadLocal的。而弱引用对象在下次GC被回收呢，是指当前对象有且仅有弱引用时，才会被回收。一般使用TConstants形式使用，故ThreadLocal对象出了在Entry中的弱引用外，还存在一个强引用，故不会被回收。
+
+   所以，在我们一般使用的时候，这个key并不会被♻️！如果我们定义了足够多的ThreadLocal，或者ThreadLocal中存储的对象是特别大的，且不手动清理，就会造成内存泄漏，然后内存溢出！
+
+   所以，一定要回收啊，问题会有很多的！！！
