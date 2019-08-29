@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 public class ThreadLocalTest {
 
     public static void main(String[] args) throws InterruptedException {
-        test2();
+        test3();
     }
 
     public static void test1() {
@@ -33,8 +33,8 @@ public class ThreadLocalTest {
 
         List<String> list = new ArrayList<>(1024);
 
-        for(int i = 0 ; i < 1024 ; i++) {
-            list.add("a"+i);
+        for (int i = 0; i < 1024; i++) {
+            list.add("a" + i);
         }
 
         es.execute(() -> {
@@ -50,13 +50,13 @@ public class ThreadLocalTest {
                 e.printStackTrace();
             }
 
-            print("sstr:"+sstr.get());
-            print("wstr:"+wstr.get());
+            print("sstr:" + sstr.get());
+            print("wstr:" + wstr.get());
 
         });
 
         System.out.println("start gc");
-        for(int i = 0 ; i < 999 ; i++) {
+        for (int i = 0; i < 999; i++) {
             System.gc();
         }
         System.out.println("end gc");
@@ -64,9 +64,25 @@ public class ThreadLocalTest {
         Thread.sleep(1000L);
 
         es.execute(() -> {
-            System.out.println(Thread.currentThread().getName() + " 再另一个线程里 ============ " + TConstants.get());
+            System.out.println(Thread.currentThread().getName() + " 在同一个线程另一个任务里 ============ " + TConstants.get());
         });
         es.shutdown();
+    }
+
+    public static void test3() {
+        Integer a = 3;
+
+        IntegerConstants.set(a);
+
+        a = 4;
+
+        aaa();
+
+        System.out.println("main "+a);
+    }
+
+    private static void aaa() {
+        System.out.println("int aaa "+ IntegerConstants.get());
     }
 
     public static void print(Object object) {
