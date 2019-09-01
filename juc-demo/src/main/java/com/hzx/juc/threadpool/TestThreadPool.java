@@ -1,5 +1,6 @@
 package com.hzx.juc.threadpool;
 
+import java.lang.reflect.Field;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,20 +13,47 @@ import java.util.concurrent.Future;
  */
 public class TestThreadPool {
 
-    public static void main(String[] args)  {
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
+    public static void main(String[] args) throws Exception {
+        test4();
+    }
 
-        Future f = executorService.submit(new MyThread());
+    private static void test4() throws NoSuchFieldException, IllegalAccessException {
 
-        try {
-            f.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        Thread thread = Thread.currentThread();
+        ThreadGroup group = thread.getThreadGroup();
+        Class<ThreadGroup> groupClass = ThreadGroup.class;
+
+        Runnable runnable = () -> {
+            System.out.println("我是 " + Thread.currentThread().getName());
+            try {
+                Thread.sleep(20000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+
+        for (int i = 0; i < 10; i++) {
+            Thread t1 = new Thread(group, runnable);
+            t1.start();
         }
 
-        executorService.shutdown();
+        Field[] fields = groupClass.getDeclaredFields();
+        for (Field f : fields) {
+            f.setAccessible(true);
+            System.out.println(f.getName() + " : " + f.get(group));
+            f.setAccessible(false);
+        }
+
+    }
+
+    private static void test1() throws InterruptedException {
+        Thread t = new Thread(() -> {
+            System.out.println("print " + Thread.currentThread().getName());
+        });
+        t.start();
+        System.out.println("=========上个线程已启动");
+        Thread.sleep(1000L);
+        // t.start();
     }
 
     /**
@@ -40,7 +68,7 @@ public class TestThreadPool {
             // try {
             //     Thread.sleep(1000);
             // } catch (InterruptedException e) {
-            //
+            //            // }
             // }
 
             // Thread.currentThread().stop();
@@ -65,6 +93,22 @@ public class TestThreadPool {
         });
 
         Thread.sleep(1000);
+
+        executorService.shutdown();
+    }
+
+    private static void test2() {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        Future f = executorService.submit(new MyThread());
+
+        try {
+            f.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
         executorService.shutdown();
     }
