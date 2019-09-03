@@ -122,6 +122,9 @@ public class HashMap extends AbstractMap<K,V>
 
 在put时，key与value均不能为null。其他基本同HashMap，在jdk1.7与1.8中，一个采取分段锁，一个使用CAS与锁定桶中第一个元素（即链表的首元素或者树的根节点）来保证线程安全。
 
+- jdk1.7 采用 Segment + HashEntry + Unsafe的方式进行实现
+- jdk1.8 采用Synchronized + CAS + Node + Unsafe 的实现
+
 ### 问题
 
 - ConcurrentHashMap的锁分段技术

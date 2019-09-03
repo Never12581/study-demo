@@ -1,4 +1,4 @@
-#### 原子性
+####  原子性
 
 由java内存模型来直接保证的原子性变量包括read、load、assign、use、store、write；基本类型的读写是具备原子性的（一般会将long和double实现成原子性读写）
 
