@@ -31,11 +31,11 @@ AQS提供一个框架，用于实现依赖先进先出（FIFO）等待队列的�
 
 - protected int tryAcquireShared(int arg)
 > 同tryAcquire(int arg)方法，区别在于本方法用于共享模式
- 
+
 - protected boolean tryReleaseShared(int arg)
 > 同 tryRelease(int arg)方法，区别在于本方法用于共享模式
 
---- 
+---
 
 ## 获取信号量失败以后入队 （FIFO等待队列）
 
@@ -66,7 +66,7 @@ Cancellation introduces some conservatism to the basic algorithms.  Since we mus
 ### 独占锁与共享锁方法实现对比
 
 **独占锁** | **共享锁** 
----|---
+—|—
 tryAcquire(int arg) | tryAcquireShared(int arg) 
 tryAcquireNanos(int arg, long nanosTimeout)	| tryAcquireSharedNanos(int arg, long nanosTimeout) 
 acquire(int arg)| acquireShared(int arg)|

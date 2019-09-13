@@ -227,9 +227,46 @@ redis计算hash值与索引值的算法如下
 
 > 在rehash的过程中，写操作会在两张表上进行，读操作会先查h[0]，后查h[1]
 
+## 跳跃表
 
+ 跳跃表（skiplist）是一种有序数据结构，它通过在每个节点中维持多个指向其他节点的指针，从而达到快速访问节点的目的。跳跃表支持平均O(logN)，最坏O(N)复杂度的节点查找，效率可以和平衡二叉树媲美。 
 
+### 数据结构
 
+#### 跳跃表节点
+
+```c
+typedef struct zskiplistNode {
+  // 后退指针
+  struct zskiplistNode *backward ; 
+  // 分值
+  double score ;
+  // 成员对象
+  robj *obj ; 
+  // 层
+  struct zskiplistLevel {
+    // 前进指针
+    struct zskiplistNode *forward ;
+    // 跨度
+    unsigned int span ; 
+  } level[] ;
+}zskiplistNode ;
+```
+
+- 层（level）：
+
+#### 跳跃表
+
+```c
+typedef struct zskiplist {
+  // 表头节点 和表尾节点
+  struct zskiplistNode *header , *tail ; 
+  // 表中节点数量
+  unsigned long length ; 
+  // 表中层数最大的节点的层数
+  int level ;
+}zskiplist ;
+```
 
 
 
