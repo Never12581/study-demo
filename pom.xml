@@ -39,6 +39,7 @@
         <module>Leetcode</module>
         <module>data</module>
         <module>monitor</module>
+        <module>stream-demo</module>
     </modules>
 
     <dependencyManagement>
