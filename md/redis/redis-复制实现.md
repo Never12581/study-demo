@@ -157,13 +157,17 @@ psync命令具有**完整重同步(full resynchronization)** 和**部分重同�
 ```flow
 st=>start: 开始
 e=>end: 结束
-op=>operation: 从服务器接收到客户端发来的slaveof命令
-cond=>condition: 这是从服务器第一次进行复制？
+op=>operation: 从服务器接收到客户端
+发来的slaveof命令
+cond=>condition: 这是从服务器
+第一次进行复制？
 isFirst=>operation: 向主服务器发送 psync ? -1 
 notFirst=>operation: 向主服务器发送 psync <runid> <offset>
-masterReturnContinue=>condition: 主服务器返回 +CONTINUE
+masterReturnContinue=>condition: 主服务器返回 
++CONTINUE
 partReSync=>operation: 执行部分重同步
-fullReSync=>operation: 主服务器返回 +FULLRESYNC <runid> <offset> 执行完整重同步
+fullReSync=>operation: 主服务器返回 +FULLRESYNC 
+<runid> <offset> 执行完整重同步
 
 st->op->cond
 cond(no)->notFirst->masterReturnContinue

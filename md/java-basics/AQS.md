@@ -65,18 +65,18 @@ Cancellation introduces some conservatism to the basic algorithms.  Since we mus
 
 ### 独占锁与共享锁方法实现对比
 
-**独占锁** | **共享锁** 
-—|—
-tryAcquire(int arg) | tryAcquireShared(int arg) 
-tryAcquireNanos(int arg, long nanosTimeout)	| tryAcquireSharedNanos(int arg, long nanosTimeout) 
-acquire(int arg)| acquireShared(int arg)|
-acquireQueued(final Node node, int arg)|doAcquireShared(int arg)
-acquireInterruptibly(int arg)|acquireSharedInterruptibly(int arg)
-doAcquireInterruptibly(int arg)|doAcquireSharedInterruptibly(int arg)
-doAcquireNanos(int arg, long nanosTimeout)|doAcquireSharedNanos(int arg, long nanosTimeout)
-release(int arg)|releaseShared(int arg)
-tryRelease(int arg)|tryReleaseShared(int arg)
--|doReleaseShared()
+| 独占锁                                      | 共享锁                                            |
+| ------------------------------------------- | ------------------------------------------------- |
+| tryAcquire(int arg)                         | tryAcquireShared(int arg)                         |
+| tryAcquireNanos(int arg, long nanosTimeout) | tryAcquireSharedNanos(int arg, long nanosTimeout) |
+| acquire(int arg)                            | acquireShared(int arg)                            |
+| acquireQueued(final Node node, int arg)     | doAcquireShared(int arg)                          |
+| acquireInterruptibly(int arg)               | acquireSharedInterruptibly(int arg)               |
+| doAcquireInterruptibly(int arg)             | doAcquireSharedInterruptibly(int arg)             |
+| doAcquireNanos(int arg, long nanosTimeout)  | doAcquireSharedNanos(int arg, long nanosTimeout)  |
+| release(int arg)                            | releaseShared(int arg)                            |
+| tryRelease(int arg)                         | tryReleaseShared(int arg)                         |
+| -                                           | doReleaseShared()                                 |
 
 
 
