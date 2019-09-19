@@ -29,14 +29,14 @@
         <module>hystrix-demo</module>
         <module>juc-demo</module>
         <module>nacos-demo</module>
-        <module>quartz-demo</module>
+        <!--<module>quartz-demo</module>-->
         <module>sc-demo</module>
         <module>sentinel-demo</module>
         <module>sort-demo</module>
         <module>tree-demo</module>
-        <module>netty-demo</module>
+        <!--<module>netty-demo</module>-->
         <module>design-demo</module>
-        <module>Leetcode</module>
+        <!--<module>Leetcode</module>-->
         <module>data</module>
         <module>monitor</module>
         <module>stream-demo</module>
