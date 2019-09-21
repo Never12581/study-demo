@@ -22,6 +22,9 @@ public class TestTimeTask {
             map.put(i+" "+ random.nextInt(),"a"+i);
         }
         System.out.println(map.size());
+        if(map.size() >= 100000) {
+            map.clear();
+        }
     }
 
 }
