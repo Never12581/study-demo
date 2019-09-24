@@ -178,5 +178,9 @@ typedef struct clusterState {
 6. 之后，节点A将向节点B发送一条PING消息
 7. 如果一切顺利，节点B将接收到节点A返回到ping消息，通过这条ping消息节点B可以知道节点A已经成功地收到了自己返回到pong消息，握手完成。
 
+![节点握手过程](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-节点握手过程.jpg)
 
+之后，节点A会将节点B的信息通过<font color='red'>Gossip协议</font>传播给集群中的其他节点，让其他节点也与节点B进行握手，最终，经过一段时间之后，节点B会被集群中所有节点认识。
+
+## 槽指派
 
