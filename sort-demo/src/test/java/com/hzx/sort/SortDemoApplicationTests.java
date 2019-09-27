@@ -11,6 +11,12 @@ public class SortDemoApplicationTests {
 
     @Test
     public void contextLoads() {
+        }
+
+    public static void main(String[] args) {
+        Integer i = 1 ;
+        Integer j = 2 ;
+        System.out.println( i.compareTo(j) );
     }
 
 }

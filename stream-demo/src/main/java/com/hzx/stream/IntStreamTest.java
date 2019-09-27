@@ -34,6 +34,7 @@ public class IntStreamTest {
 
         long c = toLong(1,k-> (long)k);
         System.out.println("传入: 1   c:"+c);
+
     }
 
     private static void splitLine(){
