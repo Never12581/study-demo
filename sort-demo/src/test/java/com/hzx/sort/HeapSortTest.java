@@ -40,4 +40,21 @@ public class HeapSortTest {
 
     }
 
+
+    @Test
+    public void testMaxHeapSort(){
+        List<Integer> list = new ArrayList<>();
+        list.add(27);
+        list.add(33);
+        list.add(15);
+        list.add(19);
+        list.add(7);
+        list.add(90);
+
+        MaxHeap<Integer> maxHeap = new MaxHeap<>(list);
+        list = maxHeap.sort();
+        System.out.println("result");
+        System.out.println(list);
+    }
+
 }

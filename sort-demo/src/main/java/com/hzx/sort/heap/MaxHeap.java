@@ -36,6 +36,22 @@ public class MaxHeap<T extends Comparable<T>> {
      *                                  右子节点下标： index * 2 + 2
      *          2. 根据 子节点 index 获取 父节点下标： (index - 1 ) / 2
      *
+     *        下沉操作：
+     *          1. 下沉操作 是指 对 堆顶(父节点) 操作
+     *          2. 条件：除了堆顶 元素外 ，整个堆 均符合最大堆概念
+     *          3. 得到当前节点，与左右子节点进行对比，
+     *              a. 若左右子节点均小于当前节点，则本堆为 最大堆 不需要再调整
+     *              b. 否则将该节点与左右节点中较大堆节点 进行交换位置 将调整后的 下标 作为新一轮堆的堆顶
+     *          4. 迭代操作3，直到不需要调整
+     *
+     *        上浮操作：
+     *          1. 上浮操作 是指 对 叶子节点（子节点）的操作
+     *          2. 条件：除了堆顶 元素外 ，整个堆 均符合最大堆概念
+     *          3. 将当前元素与父亲元素进行对应
+     *              a. 若小于父亲节点，则本堆为 最大堆 不需要再调整
+     *              b. 若大于父亲节点，则与父亲节点交换位置，将调整后的 下标 作为新一轮堆的子节点
+     *          4. 迭代操作3，直到不需要再调整
+     *
      *
      *     最大堆概念：
      *      1. 结构为完全二叉树
@@ -65,27 +81,50 @@ public class MaxHeap<T extends Comparable<T>> {
         data = list;
         int index = findParentIndex(list.size() - 1);
         for (; index >= 0; index--) {
-            swapDown(index);
+            swapDown(index, null);
         }
     }
 
+    /**
+     * 寻找堆中最大的元素
+     */
     public T findMax() {
         return data.get(0);
     }
 
+    /**
+     * 排序
+     * 思路：
+     */
+    public List<T> sort() {
+        int tempSize = data.size();
+        while (true) {
+            swap(0, tempSize - 1);
+            tempSize--;
+            swapDown(0, tempSize);
+            if (tempSize <= 1) {
+                break;
+            }
+        }
+        return data;
+    }
+
+    /**
+     * 抛出堆中的最大元素，一般用以解决top N 问题
+     */
     public T popMax() {
         T max = data.get(0);
-        data.set(0,data.get(data.size()-1));
-        data.remove(data.size()-1);
-        swapDown(0);
+        data.set(0, data.get(data.size() - 1));
+        data.remove(data.size() - 1);
+        swapDown(0, null);
         return max;
     }
 
     /**
      * 将元素下沉
      */
-    private void swapDown(int index) {
-        if(data.size() == 0) {
+    private void swapDown(int index, Integer size) {
+        if (data.size() == 0) {
             return;
         }
         if (index < 0) {
@@ -96,8 +135,8 @@ public class MaxHeap<T extends Comparable<T>> {
         }
         while (true) {
             T parent = data.get(index);
-            int leftIndex = findLeftChildIndex(index);
-            int rightIndex = findRightChildIndex(index);
+            int leftIndex = findLeftChildIndex(index, size);
+            int rightIndex = findRightChildIndex(index, size);
 
             // 不存在左右下标
             /**
@@ -144,7 +183,7 @@ public class MaxHeap<T extends Comparable<T>> {
      * 将元素上浮
      */
     private void swapUp(int index) {
-        if(data.size() == 0) {
+        if (data.size() == 0) {
             return;
         }
         if (index < 0) {
@@ -192,53 +231,40 @@ public class MaxHeap<T extends Comparable<T>> {
         return (index - 1) / 2;
     }
 
-    private T findParent(int index) {
-
-        return data.get(findParentIndex(index));
-    }
-
-    private int findLeftChildIndex(int index) {
+    private int findLeftChildIndex(int index, Integer size) {
         if (index < 0) {
             throw new RuntimeException("index illegal! index cannot less than zero");
         }
-        if (index > data.size() - 1) {
+
+        if (size == null) {
+            size = data.size();
+        }
+
+        if (index > size - 1) {
             throw new RuntimeException("index illegal! index cannot bigger than arrays.size");
         }
         index = index * 2 + 1;
-        if (index > data.size() - 1) {
+        if (index > size - 1) {
             return -1;
         }
         return index;
     }
 
-    private T findLeftChild(int index) {
-        index = findLeftChildIndex(index);
-        if (index < 0) {
-            return null;
-        }
-        return data.get(index);
-    }
-
-    private int findRightChildIndex(int index) {
+    private int findRightChildIndex(int index, Integer size) {
         if (index < 0) {
             throw new RuntimeException("index illegal! index cannot less than zero");
         }
-        if (index > data.size() - 1) {
+        if (size == null) {
+            size = data.size();
+        }
+        if (index > size - 1) {
             throw new RuntimeException("index illegal! index cannot bigger than arrays.size");
         }
         index = index * 2 + 2;
-        if (index > data.size() - 1) {
+        if (index > size - 1) {
             return -1;
         }
         return index;
-    }
-
-    private T findRightChild(int index) {
-        index = findRightChildIndex(index);
-        if (index < 0) {
-            return null;
-        }
-        return data.get(index);
     }
 
 }

@@ -28,9 +28,9 @@ public interface BaseSort {
     }
 
     static int[] randomArray(){
-        int[] arr = new int[100000];
+        int[] arr = new int[1000000];
         Random random = new Random();
-        for(int i = 0 ; i < 100000 ; i++){
+        for(int i = 0 ; i < 1000000 ; i++){
             arr[i] = random.nextInt(Integer.MAX_VALUE);
         }
         return arr;
