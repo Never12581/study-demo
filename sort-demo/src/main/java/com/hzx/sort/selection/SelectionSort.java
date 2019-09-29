@@ -4,7 +4,7 @@ import com.hzx.sort.BaseSort;
 
 /**
  * @Author: bocai.huang
- * @Descripition: selection sort 选择排序 O(n2)
+ * @Descripition: selection sortRoot 选择排序 O(n2)
  * @Date: Create in 16:56 2019/2/15
  */
 public interface SelectionSort {

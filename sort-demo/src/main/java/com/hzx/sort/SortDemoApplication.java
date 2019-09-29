@@ -325,7 +325,7 @@ public class SortDemoApplication {
         Future<String> future = executorService.submit(() -> {
             System.out.println("已经进入当前线程！");
 
-            // sort();
+            // sortRoot();
             for (int i = 0; i < 20; i++) {
                 System.out.println("*****************");
                 Thread.sleep(100);
@@ -358,7 +358,7 @@ public class SortDemoApplication {
         int[] array = randomArray();
         long start = System.currentTimeMillis();
         HeapSort.sort(array);
-        System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
+        System.out.println("Heap sortRoot cost time : " + (System.currentTimeMillis() - start));
         for (int i = 0; i < 10000; i++) {
             Thread.yield();
             // Thread.sleep(0,1);
@@ -368,7 +368,7 @@ public class SortDemoApplication {
         array = randomArray();
         start = System.currentTimeMillis();
         ShellSort.sort(array);
-        System.out.println("Shell sort cost time : " + (System.currentTimeMillis() - start));
+        System.out.println("Shell sortRoot cost time : " + (System.currentTimeMillis() - start));
         for (int i = 0; i < 10000; i++) {
             Thread.yield();
             // Thread.sleep(0,1);
@@ -378,7 +378,7 @@ public class SortDemoApplication {
         array = randomArray();
         start = System.currentTimeMillis();
         QuickSort.sort(array, 0, array.length - 1);
-        System.out.println("Quick sort cost time : " + (System.currentTimeMillis() - start));
+        System.out.println("Quick sortRoot cost time : " + (System.currentTimeMillis() - start));
         for (int i = 0; i < 10000; i++) {
             Thread.yield();
             // Thread.sleep(0,1);
@@ -388,7 +388,7 @@ public class SortDemoApplication {
         array = randomArray();
         start = System.currentTimeMillis();
         MergeSort.sort(array, 0, array.length - 1);
-        System.out.println("Merge sort cost time : " + (System.currentTimeMillis() - start));
+        System.out.println("Merge sortRoot cost time : " + (System.currentTimeMillis() - start));
         for (int i = 0; i < 10000; i++) {
             Thread.yield();
             // Thread.sleep(0,1);
@@ -398,7 +398,7 @@ public class SortDemoApplication {
         array = randomArray();
         start = System.currentTimeMillis();
         BucketSort.sort(array);
-        System.out.println("Bucket sort cost time : " + (System.currentTimeMillis() - start));
+        System.out.println("Bucket sortRoot cost time : " + (System.currentTimeMillis() - start));
         for (int i = 0; i < 10000; i++) {
             Thread.yield();
             // Thread.sleep(0,1);
@@ -408,7 +408,7 @@ public class SortDemoApplication {
         array = randomArray();
         start = System.currentTimeMillis();
         RadixSort.lsdSort(array);
-        System.out.println("Radix sort cost time : " + (System.currentTimeMillis() - start));
+        System.out.println("Radix sortRoot cost time : " + (System.currentTimeMillis() - start));
         for (int i = 0; i < 10000; i++) {
             Thread.yield();
             // Thread.sleep(0,1);

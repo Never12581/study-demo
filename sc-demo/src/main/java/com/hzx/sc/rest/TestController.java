@@ -49,52 +49,52 @@ public class TestController {
     //         ApplicationResource.RESOURCE.execute(() -> {
     //             System.out.println("==============Heap=============");
     //             int[] array = randomArray();
-    //             System.out.println("before sort : ");
+    //             System.out.println("before sortRoot : ");
     //             long start = System.currentTimeMillis();
-    //             HeapSort.sort(array);
-    //             System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
-    //             System.out.println("after sort : ");
+    //             HeapSort.sortRoot(array);
+    //             System.out.println("Heap sortRoot cost time : " + (System.currentTimeMillis() - start));
+    //             System.out.println("after sortRoot : ");
     //
     //             System.out.println("==============Shell=============");
     //             array = randomArray();
-    //             System.out.println("before sort : ");
+    //             System.out.println("before sortRoot : ");
     //             start = System.currentTimeMillis();
-    //             ShellSort.sort(array);
-    //             System.out.println("Shell sort cost time : " + (System.currentTimeMillis() - start));
-    //             System.out.println("after sort : ");
+    //             ShellSort.sortRoot(array);
+    //             System.out.println("Shell sortRoot cost time : " + (System.currentTimeMillis() - start));
+    //             System.out.println("after sortRoot : ");
     //
     //
     //             System.out.println("==============Quick=============");
     //             array = randomArray();
-    //             System.out.println("before sort : ");
+    //             System.out.println("before sortRoot : ");
     //             start = System.currentTimeMillis();
-    //             QuickSort.sort(array, 0, array.length - 1);
-    //             System.out.println("Quick sort cost time : " + (System.currentTimeMillis() - start));
-    //             System.out.println("after sort : ");
+    //             QuickSort.sortRoot(array, 0, array.length - 1);
+    //             System.out.println("Quick sortRoot cost time : " + (System.currentTimeMillis() - start));
+    //             System.out.println("after sortRoot : ");
     //
     //             System.out.println("==============Merge=============");
     //             array = randomArray();
-    //             System.out.println("before sort : ");
+    //             System.out.println("before sortRoot : ");
     //             start = System.currentTimeMillis();
-    //             MergeSort.sort(array, 0, array.length - 1);
-    //             System.out.println("Merge sort cost time : " + (System.currentTimeMillis() - start));
-    //             System.out.println("after sort : ");
+    //             MergeSort.sortRoot(array, 0, array.length - 1);
+    //             System.out.println("Merge sortRoot cost time : " + (System.currentTimeMillis() - start));
+    //             System.out.println("after sortRoot : ");
     //
     //             System.out.println("==============Bucket=============");
     //             array = randomArray();
-    //             System.out.println("before sort : ");
+    //             System.out.println("before sortRoot : ");
     //             start = System.currentTimeMillis();
-    //             BucketSort.sort(array);
-    //             System.out.println("Bucket sort cost time : " + (System.currentTimeMillis() - start));
-    //             System.out.println("after sort : ");
+    //             BucketSort.sortRoot(array);
+    //             System.out.println("Bucket sortRoot cost time : " + (System.currentTimeMillis() - start));
+    //             System.out.println("after sortRoot : ");
     //
     //             System.out.println("==============Radix=============");
     //             array = randomArray();
-    //             System.out.println("before sort : ");
+    //             System.out.println("before sortRoot : ");
     //             start = System.currentTimeMillis();
     //             RadixSort.lsdSort(array);
-    //             System.out.println("Radix sort cost time : " + (System.currentTimeMillis() - start));
-    //             System.out.println("after sort : ");
+    //             System.out.println("Radix sortRoot cost time : " + (System.currentTimeMillis() - start));
+    //             System.out.println("after sortRoot : ");
     //         });
     //     }
     // }
@@ -102,11 +102,11 @@ public class TestController {
     // @GetMapping(value = "test4")
     // public void test4(){
     //     // int[] array = randomArray();
-    //     // System.out.println("before sort : ");
+    //     // System.out.println("before sortRoot : ");
     //     // long start = System.currentTimeMillis();
-    //     // MergeSort.sort(array, 0, array.length - 1);
-    //     // System.out.println("Merge sort cost time : " + (System.currentTimeMillis() - start));
-    //     // System.out.println("after sort : ");
+    //     // MergeSort.sortRoot(array, 0, array.length - 1);
+    //     // System.out.println("Merge sortRoot cost time : " + (System.currentTimeMillis() - start));
+    //     // System.out.println("after sortRoot : ");
     //
     //     stack();
     //
