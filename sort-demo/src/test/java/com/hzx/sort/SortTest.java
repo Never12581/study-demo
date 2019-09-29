@@ -1,11 +1,15 @@
 package com.hzx.sort;
 
+import com.hzx.sort.heap.ArrayMaxHeap2;
 import com.hzx.sort.heap.HeapSort;
 import com.hzx.sort.heap.IntArrayMaxHeap;
+import com.hzx.sort.heap.IntArrayMaxHeap2;
 import com.hzx.sort.radix.RadixSort;
+import java.util.List;
 import org.junit.Test;
 
 import static com.hzx.sort.BaseSort.copyArray;
+import static com.hzx.sort.BaseSort.copyArray2ListInteger;
 import static com.hzx.sort.BaseSort.randomArray;
 
 /**
@@ -27,7 +31,7 @@ public class SortTest {
         int[] arrayK = randomArray();
 
 
-        System.out.println("==============Heap=============");
+        System.out.println("==============Heap 网上抄的 =============");
         int[] array = copyArray(arrayK);
         System.out.println("before sort : ");
         long start = System.currentTimeMillis();
@@ -44,48 +48,43 @@ public class SortTest {
         }
         System.out.println("排序："+flag);
 
-
-//        System.out.println("==============Heap2=============");
-//        array = randomArray();
-//        List<Integer> list = new ArrayList<>(array.length);
-//        Arrays.stream(array).forEach(e->{
-//            list.add(e);
-//        });
-//        System.out.println("before sort : ");
-//        start = System.currentTimeMillis();
-//        List<Integer> list2 = new MaxHeap<>(list).sort();
-//        System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
-//        System.out.println("after sort : ");
-//        flag = true;
-//        for(int i = 1 ; i < array.length ; i++){
-//            if(array[i-1] > array[i]) {
-//                flag = false;
-//                break;
-//            }
-//        }
-//        System.out.println("排序："+flag);
-
-//        System.out.println("==============Heap3=============");
-//        Integer[] array1 = randomArrayInteger();
-//        System.out.println("before sort : ");
-//        start = System.currentTimeMillis();
-//        new ArrayMaxHeap<>(array1).sort();
-//        System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
-//        System.out.println("after sort : ");
-//        flag = true;
-//        for(int i = 1 ; i < array1.length ; i++){
-//            if(array1[i-1] > array1[i]) {
-//                flag = false;
-//                break;
-//            }
-//        }
-//        System.out.println("排序："+flag);
-
-        System.out.println("==============Heap4=============");
+        System.out.println("==============Heap4 int 参数类型，未引入实际大小参数 =============");
         array = copyArray(arrayK);
         System.out.println("before sort : ");
         start = System.currentTimeMillis();
         new IntArrayMaxHeap(array).sort();
+        System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
+        System.out.println("after sort : ");
+        flag = true;
+        for(int i = 1 ; i < array.length ; i++){
+            if(array[i-1] > array[i]) {
+                flag = false;
+                break;
+            }
+        }
+        System.out.println("排序："+flag);
+
+        System.out.println("==============Heap5 Integer参数类型，引入了实际大小参数=============");
+        Integer[] intList = copyArray2ListInteger(array);
+        System.out.println("before sort : ");
+        start = System.currentTimeMillis();
+        new ArrayMaxHeap2<>(intList).sort();
+        System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
+        System.out.println("after sort : ");
+        flag = true;
+        for(int i = 1 ; i < array.length ; i++){
+            if(array[i-1] > array[i]) {
+                flag = false;
+                break;
+            }
+        }
+        System.out.println("排序："+flag);
+
+        System.out.println("==============Heap6 int参数类型，引入了实际大小参数 =============");
+        arrayK = copyArray(array);
+        System.out.println("before sort : ");
+        start = System.currentTimeMillis();
+        new IntArrayMaxHeap2(arrayK).sort();
         System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
         System.out.println("after sort : ");
         flag = true;
