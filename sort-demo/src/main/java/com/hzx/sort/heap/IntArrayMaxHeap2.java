@@ -1,5 +1,7 @@
 package com.hzx.sort.heap;
 
+import static com.hzx.sort.BaseSort.swap;
+
 /**
  * @author: bocai.huang
  * @create: 2019-09-27 09:46 最大堆 因实现受限，最好传入的是 数组类型的List
@@ -99,11 +101,10 @@ public class IntArrayMaxHeap2 {
      * 排序 思路：从顶
      */
     public int[] sort() {
-        int tempSize = 0;
+        int tempSize = data.length;
         while (true) {
-            tempSize = actualSize;
-            swap(0, tempSize - 1);
-            actualSize--;
+            tempSize-- ;
+            swap(0, tempSize );
             swapDown(0, tempSize);
             if (tempSize <= 1) {
                 break;
@@ -138,48 +139,23 @@ public class IntArrayMaxHeap2 {
         if (index > data.length - 1) {
             throw new RuntimeException("index illegal! index cannot bigger than arrays.size");
         }
+        if(size ==null) {
+            size = data.length;
+        }
         while (true) {
-            int parent = data[index];
             int leftIndex = findLeftChildIndex(index, size);
-            int rightIndex = findRightChildIndex(index, size);
 
-            // 不存在左右下标
-            /**
-             * 当前节点的左子节点下标不存，那么右子节点下标一定不存在，说明其是子节点不需要再下沉了
-             */
             if (leftIndex < 0) {
                 return;
+            } else if(leftIndex + 1 < size && data[leftIndex] < data[leftIndex+1]){
+                leftIndex ++ ;
             }
-            /**
-             * 如果右子节点下标不存在，仅需要判断左子节点
-             *
-             * 1.compareinto(2) = -1
-             *
-             */
-            if (rightIndex < 0) {
-                if (parent<data[leftIndex]) {
-                    swap(index, leftIndex);
-                    index = leftIndex;
-                    continue;
-                } else {
-                    break;
-                }
-            }
-
-            /**
-             * 判断出三者最大值
-             */
-            int maxIndex = 0;
-            if (data[leftIndex]<data[rightIndex]) {
-                maxIndex = rightIndex;
+            if (data[leftIndex] > data[index]) {
+                swap(leftIndex,index);
+                index = leftIndex;
             } else {
-                maxIndex = leftIndex;
+                break;
             }
-
-            if (data[index]<data[maxIndex]) {
-                swap(index, maxIndex);
-            }
-            index = maxIndex;
         }
 
     }

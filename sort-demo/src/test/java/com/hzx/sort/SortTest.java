@@ -30,16 +30,31 @@ public class SortTest {
     public void test() {
         int[] arrayK = randomArray();
 
-
-        System.out.println("==============Heap 网上抄的 =============");
+        System.out.println("==============Heap6 int参数类型，引入了实际大小参数 =============");
         int[] array = copyArray(arrayK);
         System.out.println("before sort : ");
         long start = System.currentTimeMillis();
+        new IntArrayMaxHeap2(array).sort();
+        System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
+        System.out.println("after sort : ");
+        boolean flag = true;
+        for(int i = 1 ; i < array.length ; i++){
+            if(array[i-1] > array[i]) {
+                flag = false;
+                break;
+            }
+        }
+        System.out.println("排序："+flag);
+
+        System.out.println("==============Heap 网上抄的 =============");
+        array = copyArray(arrayK);
+        System.out.println("before sort : ");
+        start = System.currentTimeMillis();
         HeapSort.sort(array);
         System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
         System.out.println("after sort : ");
 
-        boolean flag = true;
+        flag = true;
         for(int i = 1 ; i < array.length ; i++){
             if(array[i-1] > array[i]) {
                 flag = false;
@@ -64,37 +79,7 @@ public class SortTest {
         }
         System.out.println("排序："+flag);
 
-        System.out.println("==============Heap5 Integer参数类型，引入了实际大小参数=============");
-        Integer[] intList = copyArray2ListInteger(array);
-        System.out.println("before sort : ");
-        start = System.currentTimeMillis();
-        new ArrayMaxHeap2<>(intList).sort();
-        System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
-        System.out.println("after sort : ");
-        flag = true;
-        for(int i = 1 ; i < array.length ; i++){
-            if(array[i-1] > array[i]) {
-                flag = false;
-                break;
-            }
-        }
-        System.out.println("排序："+flag);
 
-        System.out.println("==============Heap6 int参数类型，引入了实际大小参数 =============");
-        arrayK = copyArray(array);
-        System.out.println("before sort : ");
-        start = System.currentTimeMillis();
-        new IntArrayMaxHeap2(arrayK).sort();
-        System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
-        System.out.println("after sort : ");
-        flag = true;
-        for(int i = 1 ; i < array.length ; i++){
-            if(array[i-1] > array[i]) {
-                flag = false;
-                break;
-            }
-        }
-        System.out.println("排序："+flag);
 
 //        System.out.println("==============Shell=============");
 //        array = randomArray();

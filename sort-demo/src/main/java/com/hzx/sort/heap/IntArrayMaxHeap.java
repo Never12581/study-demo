@@ -96,8 +96,8 @@ public class IntArrayMaxHeap {
     public int[] sort() {
         int tempSize = data.length;
         while (true) {
-            swap(0, tempSize - 1);
             tempSize-- ;
+            swap(0, tempSize );
             swapDown(0, tempSize);
             if (tempSize <= 1) {
                 break;

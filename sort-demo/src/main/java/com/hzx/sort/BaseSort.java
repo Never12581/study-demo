@@ -30,7 +30,7 @@ public interface BaseSort {
     }
 
     static int[] randomArray(){
-        int size = 50000000;
+        int size = 10000000;
         int[] arr = new int[size];
         Random random = new Random();
         for(int i = 0 ; i < size ; i++){
