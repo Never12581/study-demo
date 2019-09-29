@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public interface BaseSort {
 
-    // void sortRoot(int[] array);
+    // void sort(int[] array);
 
     static void swap(int[] array, int index1, int index2) {
         if (index1 != index2) {
@@ -28,10 +28,18 @@ public interface BaseSort {
     }
 
     static int[] randomArray(){
-        int[] arr = new int[1000000];
+        int[] arr = new int[10000000];
         Random random = new Random();
-        for(int i = 0 ; i < 1000000 ; i++){
+        for(int i = 0 ; i < 10000000 ; i++){
             arr[i] = random.nextInt(Integer.MAX_VALUE);
+        }
+        return arr;
+    }
+
+    static int[] copyArray(int[] array) {
+        int[] arr = new int[array.length];
+        for(int i = 0 ; i < array.length ; i ++) {
+            arr[i] = array[i];
         }
         return arr;
     }

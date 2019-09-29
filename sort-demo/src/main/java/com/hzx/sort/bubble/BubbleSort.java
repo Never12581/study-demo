@@ -4,7 +4,7 @@ import com.hzx.sort.BaseSort;
 
 /**
  * @Author: bocai.huang
- * @Descripition: bubble sortRoot 冒泡排序 O(n2)
+ * @Descripition: bubble sort 冒泡排序 O(n2)
  * @Date: Create in 16:38 2019/2/15
  */
 public interface BubbleSort {

@@ -3,9 +3,8 @@ package com.hzx.sort.heap;
 /**
  * @author: bocai.huang
  * @create: 2019-09-27 09:46 最大堆 因实现受限，最好传入的是 数组类型的List
- * 当前实现无法完成基本类型的需求
  **/
-public class ArrayMaxHeap<T extends Comparable<T>> {
+public class IntArrayMaxHeap {
 
     /**
      *
@@ -74,9 +73,9 @@ public class ArrayMaxHeap<T extends Comparable<T>> {
     /**
      * 数组
      */
-    private T[] data;
+    private int[] data;
 
-    public ArrayMaxHeap(T[] array) {
+    public IntArrayMaxHeap(int[] array) {
         data = array;
         int index = findParentIndex(array.length - 1);
         for (; index >= 0; index--) {
@@ -87,18 +86,18 @@ public class ArrayMaxHeap<T extends Comparable<T>> {
     /**
      * 寻找堆中最大的元素
      */
-    public T findMax() {
+    public int findMax() {
         return data[0];
     }
 
     /**
      * 排序 思路：从顶
      */
-    public T[] sortRoot() {
+    public int[] sort() {
         int tempSize = data.length;
         while (true) {
             swap(0, tempSize - 1);
-            tempSize--;
+            tempSize-- ;
             swapDown(0, tempSize);
             if (tempSize <= 1) {
                 break;
@@ -112,10 +111,11 @@ public class ArrayMaxHeap<T extends Comparable<T>> {
     /**
      * 抛出堆中的最大元素，一般用以解决top N 问题
      */
-    public T popMax() {
-        T max = data[0];
+    public int popMax() {
+        int max = data[0];
         data[0] = data[data.length - 1];
-        data[data.length - 1] = null;
+        // fixme ： 基本类型，这里肯定有问题
+        data[data.length - 1] = 0;
         swapDown(0, null);
         return max;
     }
@@ -134,7 +134,7 @@ public class ArrayMaxHeap<T extends Comparable<T>> {
             throw new RuntimeException("index illegal! index cannot bigger than arrays.size");
         }
         while (true) {
-            T parent = data[index];
+            int parent = data[index];
             int leftIndex = findLeftChildIndex(index, size);
             int rightIndex = findRightChildIndex(index, size);
 
@@ -148,11 +148,11 @@ public class ArrayMaxHeap<T extends Comparable<T>> {
             /**
              * 如果右子节点下标不存在，仅需要判断左子节点
              *
-             * 1.compareTo(2) = -1
+             * 1.compareinto(2) = -1
              *
              */
             if (rightIndex < 0) {
-                if (parent.compareTo(data[leftIndex]) < 0) {
+                if (parent<data[leftIndex]) {
                     swap(index, leftIndex);
                     index = leftIndex;
                     continue;
@@ -165,13 +165,13 @@ public class ArrayMaxHeap<T extends Comparable<T>> {
              * 判断出三者最大值
              */
             int maxIndex = 0;
-            if (data[leftIndex].compareTo(data[rightIndex]) < 0) {
+            if (data[leftIndex]<data[rightIndex]) {
                 maxIndex = rightIndex;
             } else {
                 maxIndex = leftIndex;
             }
 
-            if (data[index].compareTo(data[maxIndex]) < 0) {
+            if (data[index]<data[maxIndex]) {
                 swap(index, maxIndex);
             }
             index = maxIndex;
@@ -197,7 +197,7 @@ public class ArrayMaxHeap<T extends Comparable<T>> {
                 break;
             }
             int parentIndex = findParentIndex(index);
-            if (data[index].compareTo(data[parentIndex]) < 0) {
+            if (data[index]<data[parentIndex]) {
                 swap(index, parentIndex);
                 index = parentIndex;
             } else {
@@ -216,7 +216,7 @@ public class ArrayMaxHeap<T extends Comparable<T>> {
             || index2 > data.length - 1) {
             throw new RuntimeException("index illegal! index cannot less than zero");
         }
-        T temp = data[index];
+        int temp = data[index];
         data[index] = data[index2];
         data[index2] = temp;
     }

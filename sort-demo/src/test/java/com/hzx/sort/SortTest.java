@@ -1,16 +1,12 @@
 package com.hzx.sort;
 
-import com.hzx.sort.heap.ArrayMaxHeap;
 import com.hzx.sort.heap.HeapSort;
-import com.hzx.sort.heap.MaxHeap;
+import com.hzx.sort.heap.IntArrayMaxHeap;
 import com.hzx.sort.radix.RadixSort;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import org.junit.Test;
 
+import static com.hzx.sort.BaseSort.copyArray;
 import static com.hzx.sort.BaseSort.randomArray;
-import static com.hzx.sort.BaseSort.randomArrayInteger;
 
 /**
  * @Author: bocai.huang
@@ -28,14 +24,16 @@ public class SortTest {
 
     @Test
     public void test() {
+        int[] arrayK = randomArray();
+
 
         System.out.println("==============Heap=============");
-        int[] array = randomArray();
-        System.out.println("before sortRoot : ");
+        int[] array = copyArray(arrayK);
+        System.out.println("before sort : ");
         long start = System.currentTimeMillis();
         HeapSort.sort(array);
-        System.out.println("Heap sortRoot cost time : " + (System.currentTimeMillis() - start));
-        System.out.println("after sortRoot : ");
+        System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
+        System.out.println("after sort : ");
 
         boolean flag = true;
         for(int i = 1 ; i < array.length ; i++){
@@ -47,17 +45,49 @@ public class SortTest {
         System.out.println("排序："+flag);
 
 
-        System.out.println("==============Heap2=============");
-        array = randomArray();
-        List<Integer> list = new ArrayList<>(array.length);
-        Arrays.stream(array).forEach(e->{
-            list.add(e);
-        });
-        System.out.println("before sortRoot : ");
+//        System.out.println("==============Heap2=============");
+//        array = randomArray();
+//        List<Integer> list = new ArrayList<>(array.length);
+//        Arrays.stream(array).forEach(e->{
+//            list.add(e);
+//        });
+//        System.out.println("before sort : ");
+//        start = System.currentTimeMillis();
+//        List<Integer> list2 = new MaxHeap<>(list).sort();
+//        System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
+//        System.out.println("after sort : ");
+//        flag = true;
+//        for(int i = 1 ; i < array.length ; i++){
+//            if(array[i-1] > array[i]) {
+//                flag = false;
+//                break;
+//            }
+//        }
+//        System.out.println("排序："+flag);
+
+//        System.out.println("==============Heap3=============");
+//        Integer[] array1 = randomArrayInteger();
+//        System.out.println("before sort : ");
+//        start = System.currentTimeMillis();
+//        new ArrayMaxHeap<>(array1).sort();
+//        System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
+//        System.out.println("after sort : ");
+//        flag = true;
+//        for(int i = 1 ; i < array1.length ; i++){
+//            if(array1[i-1] > array1[i]) {
+//                flag = false;
+//                break;
+//            }
+//        }
+//        System.out.println("排序："+flag);
+
+        System.out.println("==============Heap4=============");
+        array = copyArray(arrayK);
+        System.out.println("before sort : ");
         start = System.currentTimeMillis();
-        List<Integer> list2 = new MaxHeap<>(list).sort();
-        System.out.println("Heap sortRoot cost time : " + (System.currentTimeMillis() - start));
-        System.out.println("after sortRoot : ");
+        new IntArrayMaxHeap(array).sort();
+        System.out.println("Heap sort cost time : " + (System.currentTimeMillis() - start));
+        System.out.println("after sort : ");
         flag = true;
         for(int i = 1 ; i < array.length ; i++){
             if(array[i-1] > array[i]) {
@@ -67,86 +97,70 @@ public class SortTest {
         }
         System.out.println("排序："+flag);
 
-        System.out.println("==============Heap3=============");
-        Integer[] array1 = randomArrayInteger();
-        System.out.println("before sortRoot : ");
-        start = System.currentTimeMillis();
-        new ArrayMaxHeap<>(array1).sortRoot();
-        System.out.println("Heap sortRoot cost time : " + (System.currentTimeMillis() - start));
-        System.out.println("after sortRoot : ");
-        flag = true;
-        for(int i = 1 ; i < array1.length ; i++){
-            if(array1[i-1] > array1[i]) {
-                flag = false;
-                break;
-            }
-        }
-        System.out.println("排序："+flag);
-
 //        System.out.println("==============Shell=============");
 //        array = randomArray();
-//        System.out.println("before sortRoot : ");
+//        System.out.println("before sort : ");
 //        start = System.currentTimeMillis();
-//        ShellSort.sortRoot(array);
-//        System.out.println("Shell sortRoot cost time : " + (System.currentTimeMillis() - start));
-//        System.out.println("after sortRoot : ");
+//        ShellSort.sort(array);
+//        System.out.println("Shell sort cost time : " + (System.currentTimeMillis() - start));
+//        System.out.println("after sort : ");
 //
 //
 //        System.out.println("==============Quick=============");
 //        array = randomArray();
-//        System.out.println("before sortRoot : ");
+//        System.out.println("before sort : ");
 //        start = System.currentTimeMillis();
-//        QuickSort.sortRoot(array, 0, array.length - 1);
-//        System.out.println("Quick sortRoot cost time : " + (System.currentTimeMillis() - start));
-//        System.out.println("after sortRoot : ");
+//        QuickSort.sort(array, 0, array.length - 1);
+//        System.out.println("Quick sort cost time : " + (System.currentTimeMillis() - start));
+//        System.out.println("after sort : ");
 //
 //        System.out.println("==============Merge=============");
 //        array = randomArray();
-//        System.out.println("before sortRoot : ");
+//        System.out.println("before sort : ");
 //        start = System.currentTimeMillis();
-//        MergeSort.sortRoot(array, 0, array.length - 1);
-//        System.out.println("Merge sortRoot cost time : " + (System.currentTimeMillis() - start));
-//        System.out.println("after sortRoot : ");
+//        MergeSort.sort(array, 0, array.length - 1);
+//        System.out.println("Merge sort cost time : " + (System.currentTimeMillis() - start));
+//        System.out.println("after sort : ");
 //
 //        System.out.println("==============Bucket=============");
 //        array = randomArray();
-//        System.out.println("before sortRoot : ");
+//        System.out.println("before sort : ");
 //        start = System.currentTimeMillis();
-//        BucketSort.sortRoot(array);
-//        System.out.println("Bucket sortRoot cost time : " + (System.currentTimeMillis() - start));
-//        System.out.println("after sortRoot : ");
+//        BucketSort.sort(array);
+//        System.out.println("Bucket sort cost time : " + (System.currentTimeMillis() - start));
+//        System.out.println("after sort : ");
 //
 //        System.out.println("==============Radix=============");
 //        array = randomArray();
-//        System.out.println("before sortRoot : ");
+//        System.out.println("before sort : ");
 //        start = System.currentTimeMillis();
 //        RadixSort.lsdSort(array);
-//        System.out.println("Radix sortRoot cost time : " + (System.currentTimeMillis() - start));
-//        System.out.println("after sortRoot : ");
+//        System.out.println("Radix sort cost time : " + (System.currentTimeMillis() - start));
+//        System.out.println("after sort : ");
 
         // System.out.println("==============Insertion=============");
         // array = randomArray();
-        // System.out.println("before sortRoot : ");
+        // System.out.println("before sort : ");
         // start = System.currentTimeMillis();
-        // InsertionSort.sortRoot(array);
-        // System.out.println("Insertion sortRoot cost time : " + (System.currentTimeMillis() - start));
-        // System.out.println("after sortRoot : ");
+        // InsertionSort.sort(array);
+        // System.out.println("Insertion sort cost time : " + (System.currentTimeMillis() - start));
+        // System.out.println("after sort : ");
         //
         // System.out.println("==============Selection=============");
         // array = randomArray();
-        // System.out.println("before sortRoot : ");
+        // System.out.println("before sort : ");
         // start = System.currentTimeMillis();
-        // SelectionSort.sortRoot(array);
-        // System.out.println("Selection sortRoot cost time : " + (System.currentTimeMillis() - start));
-        // System.out.println("after sortRoot : ");
+        // SelectionSort.sort(array);
+        // System.out.println("Selection sort cost time : " + (System.currentTimeMillis() - start));
+        // System.out.println("after sort : ");
         //
         // System.out.println("===============Bubble================");
         // array = randomArray();
-        // System.out.println("before sortRoot : ");
+        // System.out.println("before sort : ");
         // start = System.currentTimeMillis();
-        // BubbleSort.sortRoot(array);
-        // System.out.println("Bubble sortRoot cost time : " + (System.currentTimeMillis() - start));
-        // System.out.println("after sortRoot : ");
+        // BubbleSort.sort(array);
+        // System.out.println("Bubble sort cost time : " + (System.currentTimeMillis() - start));
+        // System.out.println("after sort : ");
 
     }
 
