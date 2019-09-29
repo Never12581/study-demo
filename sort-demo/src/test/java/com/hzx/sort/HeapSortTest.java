@@ -1,7 +1,7 @@
 package com.hzx.sort;
 
 import com.hzx.sort.heap.HeapSort;
-import com.hzx.sort.heap.MaxHeap;
+import com.hzx.sort.heap.CollectionMaxHeap;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
@@ -33,9 +33,9 @@ public class HeapSortTest {
         list.add(7);
         list.add(90);
         int size = list.size();
-        MaxHeap<Integer> maxHeap = new MaxHeap<>(list);
+        CollectionMaxHeap<Integer> collectionMaxHeap = new CollectionMaxHeap<>(list);
         for(int i = 0 ; i < size  ; i++) {
-            System.out.println(maxHeap.popMax());
+            System.out.println(collectionMaxHeap.popMax());
         }
 
     }
@@ -51,8 +51,8 @@ public class HeapSortTest {
         list.add(7);
         list.add(90);
 
-        MaxHeap<Integer> maxHeap = new MaxHeap<>(list);
-        list = maxHeap.sort();
+        CollectionMaxHeap<Integer> collectionMaxHeap = new CollectionMaxHeap<>(list);
+        list = collectionMaxHeap.sort();
         System.out.println("result");
         System.out.println(list);
     }
