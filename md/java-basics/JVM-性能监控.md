@@ -15,6 +15,8 @@ jsp（JVM Process Status Tool）名字与ps相似，功能也与ps相近，可�
 
 ### jstat：虚拟机统计信息监控工具
 
+
+
 jstat（JVM Statistics Monitoring Tool）是用于监视虚拟机各种运行状态信息的命令行工具。它可以显示本地或远程 虚拟机进程中的类装载、内存、垃圾收集、JIT编译等运行数据，在没有GUI图形界面，只提供了纯文本控制台环境等服务器上，它将是运行期定位虚拟机性能问题的首选工具。
 
 jstat命令格式如下：

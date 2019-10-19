@@ -16,7 +16,7 @@ public class TestTimeTask {
     final Map<String,String> map = new HashMap<>();
     final Random random = new Random();
 
-    @Scheduled(cron = "0/1 * * * * ?")
+//    @Scheduled(cron = "0/1 * * * * ?")
     public void execuete(){
         for(int i = 0 ; i < 10001 ; i++ ) {
             map.put(i+" "+ random.nextInt(),"a"+i);
