@@ -184,6 +184,101 @@ typedef struct clusterState {
 
 ## 槽指派
 
+redis集群通过分片的方式来保存数据库中的键值对：集群的整个数据库被氛围16384个槽（slot），数据库中每个键都属于这16384个槽中的一个，集群中的每个节点可以处理0个或最多16384个槽
+
+当数据库中16384个槽都有节点在处理时，集群处于上线状态（OK）；若存在一个槽没有得到处理，则集群处于下线状态（fail）。
+
+通过节点发送 cluster addslots 命令，我们可以将一个或多个槽指派（assign）给节点负责：
+
+```shell
+127.0.0.1:7000> cluster addslots 0 1 2 3 4 ... 7
+```
+
+同理，可以将剩余的槽分配给其他节点。
+
+将所有的槽分配给其他节点的时候，集群处于上线状态，可以使用以下命令查看：
+
+```shell
+# 查看集群状态
+127.0.0.1:7000> cluster info
+cluster_state:ok
+cluster_slots_assigned:16384
+cluster_slots_ok:16384
+cluster_slots_pfail:0
+cluster_slots_fail:0
+cluster_known_nodes:3
+cluster_size:3
+cluster_current_epoch:0
+cluster_stats_messages_sent:2699
+cluster_stats_messages_received:2617
+
+# 查看节点信息
+127.0.0.1:7000> cluster nodes 
+```
+
+### 记录节点的槽指派信息
+
+clusterNode 结构的slots属性和numslots属性记录了节点负责处理哪些槽：
+
+```c
+struct clusterNode {
+  // ...
+  unsigned char slots[16384/8];
+  
+  int numslots;
+  // ...
+};
+```
+
+slots 是一个二进制位数组（bit array) ，这个数组的长度为16384/8 = 2048个字节，共包含了16384个二进制位。
+
+Redis以0为索引，16383为终止索引，对slots数组中的16384个二进制位进行编号，并根据索引i上的二进制位的值来判断节点是否负责处理槽i。
+
+![https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/slots%E6%95%B0%E7%BB%84%E7%A4%BA%E4%BE%8B.png](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/slots数组示例.png)
+
+上图展示了，当前节点仅处理0～7号槽。
+
+因为取出和设置slots数组中任意一个二进制位的值的时间复杂度位O(1)，所以对于一个给定节点的slots数组来说，程序检查节点是否负责处理某个槽，又或者将某个槽指派给节点负责，这两个动作的时间复杂度都是O(1)。
+
+### 传播节点的槽指派信息
+
+ 一个节点除了会将自己负责处理的槽记录在clusterNode结构的slots属性和numslots属性外，它还会将自己的slots数组通过消息发送给集群中其他节点，以此来告知其他节点自己目前负责处理哪些槽。
+
+因此集群中的每个节点都知道数据库中的16384个槽分别被指派给了集群中的哪些节点
+
+### 记录集群所有槽点指派信息
+
+clusterState结构中的slots数组记录了集群中所有16384哥槽点指派信息：
+
+```c
+typedef struct clusterState{
+  // ...
+  clusterNode *slots[16384]
+  // ...
+}clusterState;
+```
+
+slots数组包含了16384个项，每个数组项都是一个指向clusterNode 结构的指针：
+
+- 如果 slots[i] 指针指向null，那么表示槽i尚未指派给任何节点
+- 如果 slots[i] 指针指向一个clusterNode结构，那么表示槽 i 已经指派给了clusterNode结构所代表的节点
+
+以上为例，slots[0] ~ slots[7] 指向 上图图示中 clusterNode ，而其他的数组各自指向对应的 clusterNode 。
+
+如果只将槽指派信息保存在各个节点的clusterNode.slots数组里，会出现一些无法高效地解决的问题，而clusterState.slots 数组的存在解决了这些问题：
+
+- 如果节点只使用 clusterNode.slots 数组 来记录槽的指派信息，那么为了知道槽 i 是否已经被指派，或者槽 i 被指派给了哪个节点，程序需要遍历clusterState.nodes 字典中的所有 clusterNode 结构，检查这些结构的slots 数组，知道找到负责处理 槽 i 的节点位置，整个过程的时间复杂度是 O(n) ，其中n为clusterState.nodes 字典保存的 clusterNode 结构的数量。
+- 而通过将所有槽点指派信息保存在clusterState.slots 数组里面，程序要检查槽 i 是否已经被指派，又或者取得负责处理槽 i 的节点，只需要访问 clusterState.slots[i] 的值即可，时间复杂度为O(1)。
+
+虽然 clusterState.slots 数组记录了集群中所有槽点指派信息，但使用 clusterNode 结构的 slots 数组来记录单个节点的槽指派信息仍然是必要的：
+
+- 因为当程序的要将 某个节点 的槽指派信息通过消息发送给其他节点时，程序只需要将相应节点的 clusterNode.slots 数组整个发送出去就可以了。
+- 另一方面，如果redis 不是用 clusterNode.slots 数组，而单独使用 clusterState.slots 数组的话，那么每次要将节点A 的槽指派信息传播给其他节点时 ， 程序必须先遍历整个clusterState.slots 数组，记录节点A 负责处理哪些槽，然后才能发送节点A 的槽指派信息。
+
+clusterState.slots 记录了集群中所有槽点指派信息，而 clusterNode.slots 数组只记录了 clusterNode 结构所代表的槽指派信息。
+
+### cluster addslots 命令的实现
+
 ## 在集群中执行命令
 
 ## 重新分片
