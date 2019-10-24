@@ -279,6 +279,37 @@ clusterState.slots 记录了集群中所有槽点指派信息，而 clusterNode.
 
 ### cluster addslots 命令的实现
 
+cluster addslots 命令接受一个或多个槽作为参数，并将所有输入的槽指派给接收该命令的节点负责：
+
+```shell
+cluster addslots <slots> [slot ...]
+```
+
+该命令的实现可由以下源码表示：
+
+```c
+def CLUSTER_ADDSLOTS(*all_input_slots):
+	// 遍历输入的所有槽
+	for i in all_input_slots :
+			// 如果有槽已经被指派，则向客户端返回错误，并终止命令执行
+			if clusterState.slots[i] != null:
+					reply_error()
+          return 
+            
+  // 若均未指派，则将这些槽指派给当前节点
+  for i in all_input_slots :
+		// 设置clusterState结构的slots数组
+		// 将slots[i] 的指针指向代表当前节点的 clusterNode 结构
+		clusterState.slots[i] = clusterState.myself
+		
+		// 访问代表当前节点的clusterNode结构的slots数组
+		// 将数组在索引i上的二进制位设置为1
+		setSlotsBit(clusterState.myself.slot,i)
+             
+```
+
+最后，当该命令执行完毕后，节点会通过发送消息告知集群中的其他节点，自己目前正在负责处理的槽。
+
 ## 在集群中执行命令
 
 ## 重新分片
