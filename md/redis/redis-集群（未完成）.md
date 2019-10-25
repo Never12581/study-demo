@@ -312,7 +312,186 @@ def CLUSTER_ADDSLOTS(*all_input_slots):
 
 ## 在集群中执行命令
 
+当客户端向节点发送与数据库键有关的命令时，接收命令的节点回计算出命令要处理的数据库键属于哪个槽，并检查这个槽是否指派给了自己：
+
+- 如果键所在的槽正好就指派给了当前节点，那么节点直接执行命令
+- 如果键所在的槽并没有指派给当前节点，那么节点会向客户端返回一个MOVED错误，指引客户端转向（redirect）至正确的节点，并再次发送之前想要执行的命令。
+
+```flow
+st=>start: 开始
+e=>end: 
+client_sent=>operation: 客户端向节点发送
+数据库键命令
+calcu_slots=>operation: 计算键属于哪个槽
+responsilble_slots=>condition: 当前节点就是负责
+处理键所在槽节点？
+execute_order=>subroutine: 节点执行命令
+return_moved=>operation: 节点向客户端
+返回一个moved错误
+moved_to_right_slot=>operation: 客户端根据moved错误
+提供的信息 转向
+至正确的节点
+
+st->client_sent->calcu_slots->responsilble_slots
+responsilble_slots(yes)->execute_order
+responsilble_slots(no)->return_moved(right)->moved_to_right_slot->client_sent
+responsilble_slots->
+
+```
+
+### 计算键属于哪个槽
+
+节点使用以下算法来计算给定键key属于哪个槽：
+
+```c
+def slot_number(key):
+	return CRC16(key) & 16383
+```
+
+其中 CRC16(key) 语句用于计算键key的CRC-16校验和，而 & 16383 语句则用于取模计算出 一个 介于 0～16383 之间的槽号。
+
+可以使用以下命令来查看给定键属于的槽：
+
+```shell
+127.0.0.1:7000 > cluster keyslot "msg"
+```
+
+该命令也是由以上算法实现的，以下为伪码实现：
+
+```c
+def cluster_keyslot(key) : 
+	# 计算槽号
+	slot = slot_number(key)
+  # 将槽号返回客户端
+  reply_client(slot)
+```
+
+### 判断槽是否由当前节点负责
+
+当节点计算出键所属槽 i 之后，节点就会检查自己在clusterState.slots 数组中的项 i ，判断键所在的槽是否由自己负责：
+
+1. 如果clusterState.slots[i] 等于 clusterState.myself ，那么说明槽 i 由当前节点负责，节点可以执行客户端发送的命令
+2. 如果 clusterState.slots[i] 不等于 clusterState.myself ，那么说明槽 i 并非由当前节点负责，阶段会根据 clusterState.slots[i] 指向的 clusterNode 结构所记录的节点 IP 与 port ， 会向客户端返回 moved 错误，指引客户端转向至正在处理槽 i 的节点。
+
+### MOVED 错误
+
+当客户端发现键所在的槽并非由自己处理时，节点就会向客户端返回一个 MOVED 错误，指引客户端转向至正在负责槽的节点。
+
+MOVED错的的格式为：
+
+```shell
+MOVED <slot> <ip>:<port>
+```
+
+当客户端接收到节点返回的moved错误时，客户端会根据moved错误中提供的IP地址和端口号，转向至负责处理槽slot节点，并向该节点重新发送之前想要执行的命令。
+
+![https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-moved%E9%94%99%E8%AF%AF%E6%BC%94%E7%A4%BA.png](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-moved错误演示.png)
+
+一个集群客户端通常会与集群中的多个节点创建套接字连接，而所谓的节点转向实际上就是换一个套接字发送命令。
+
+如果客户端尚未与想要转向的节点创建套接字连接，那么客户端会先根据MOVED错误提供的IP地址和端口号来连接节点，然后再进行转向。
+
+> #### 被隐藏的MOVED错误
+>
+> 集群模式的 redis-clie 客户端在接收到MOVED错误时，并不会打印出MOVED错误，而是根据MOVED错误自动进行节点转向，并打印出转向信息，所以我们时看不见节点返回的MOVED错误的：
+>
+> ```shell
+> $ redis-cli -c -p 7000 # 集群模式
+> 127.0.0.1:7000> set msg "happy new year!"
+> -> Redirected to slot [6275] located at 127.0.0.1:7001
+> 
+> 127.0.0.1:7001> 
+> ```
+>
+> 但是，如果我们使用单机（stand alone）模式d reds-cli客户端，再次向节点7000 发送相同的命令，那么MOVED 错误就会被客户端打印出来：
+>
+> ```shell
+> $ redis-cli -p 7000 # 单机模式
+> 127.0.0.1:7000> set msg "happy new year!"
+> (error) MOVED 6257 127.0.0.1:7001
+> 
+> 127.0.0.1:7000>
+> ```
+>
+> 这是因为单机模式的redis-cli客户端不清楚 moved 错误的作用，所以只会直接转向，而不会自动转向
+
+###  节点数据库的实现
+
+集群节点保存键值对以及键值对过期时间的方式，与单机redis服务器保存键值对以及过期方式完全相同。
+
+节点与单机服务器在数据库方面的一个区别是，节点只能使用0号数据库，而单机服务器没有这个限制。
+
+另外，出了将键值对保存在数据库里之外，节点还会用clusterState 结构中的 slots_to_keys 跳跃表来保存槽和键之间的关系
+
+```c
+typedef struct clusterState{
+  // ...
+  zskiplist *slots_to_keys;
+  // ...
+}clusterState;
+```
+
+slots_to_keys **跳跃表**每个节点的分值（score）都是一个槽号，而每个节点的成员（member）都是一个数据库键：
+
+- 每当节点往数据库中添加一个新的键值对时，节点就会将这个键以及这个键所在的槽关联到slots_to_keys中
+- 当节点删除数据库中的某个键值对时，节点就会在slots_to_keys 中解除关联
+
 ## 重新分片
+
+Redis 集群的重新分片操作可以将任意数量已经指派给某个节点（源节点）的槽改为指派给另一个节点（目标节点），并且相关槽所属的键值对也会从源节点被移动到目标节点。
+
+重新分片操作可以在线（online）操作，在重新分片的过程中，集群不需要下线，并且源节点和目标节点都可以继续处理命令请求。
+
+### 重新分片实现原理
+
+redis集群的重新分片操作是由redis的集群管理软件redis-trib负责执行的，redis提供了进行重新分片所需的所有命令，而redis-trib则通过向源节点与目标节点发送命令来进行重新分片的操作
+
+Redis-trib 对集群中单个槽slot进行重新分片的步骤如下：
+
+1. Redis-trib 对目标节点发送 cluster setslot <slot> importing <source_id> 命令，让目标节点准备好从源节点倒入（import）属于槽 slot 的键值对。
+2. redis-trib 对源节点发送 cluster setslot <slot> migrating <target_id> 命令，让源节点准备好将属于槽slot的键值对迁移（migrate）至目标节点。
+3. redis-trib 向源节点发送 cluster getkeysinslot <slot> <count> 命令，获得最多count个 属于 槽slot的键值对的键名（key name）。
+4. 对于步骤3获得的每个键名，redis-trib都想源节点发送一个 migrate <target_id> <target_port> <key_name> 0 <timeout> 命令，将被选中的键值对从源节点迁移至目标节点
+5. 重复执行步骤3与步骤4，知道源节点保存的所有属于槽slot的键值对都被迁移至目标节点为止。迁移过程如下图所示
+6. redis-trib 向集群中的任意一个节点发送cluster setslot <slot> NODE <targe_id> 命令，将槽 slot 指派给目标节点，这一指派信息会通过消息发送至整个集群，最终集群中的所有节点都会知道槽slot 已经指派给了目标节点。
+
+![https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-%E9%94%AE%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B.jpg](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-键迁移过程.jpg)
+
+如果重新分片涉及到了多个槽，那么redis-trib将对每个给定的槽分别执行上面给出的步骤。流程图如下：
+
+```flow
+st=>start: 开始
+e=>end: 结束
+
+refragment=>operation: 开始对槽slot
+进行重新分片
+target_ready=>operation: 目标节点准备导入
+槽slot的键值对
+source_ready=>operation: 源节点准备迁移
+槽slot的键值对
+
+source_exist_keys=>condition: 源节点是否保存了
+槽slot的键
+
+key_move=>operation: 将这些键全部
+迁移至目标节点
+
+slot_move=>operation: 将槽slot指派给
+目标节点
+
+over=>operation: 完成对槽slot的重新分片
+
+
+
+
+
+st->refragment(left)->target_ready->source_ready(right)->source_exist_keys
+source_exist_keys(no)->slot_move
+source_exist_keys(yes)->key_move->slot_move
+slot_move(left)->over->e
+```
+
+
 
 ## ASK错误
 
