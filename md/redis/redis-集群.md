@@ -285,7 +285,7 @@ cluster addslots 命令接受一个或多个槽作为参数，并将所有输入
 cluster addslots <slots> [slot ...]
 ```
 
-该命令的实现可由以下源码表示：
+该命令的实现可由以下伪码表示：
 
 ```c
 def CLUSTER_ADDSLOTS(*all_input_slots):
