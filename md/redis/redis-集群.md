@@ -234,7 +234,7 @@ slots 是一个二进制位数组（bit array) ，这个数组的长度为16384/
 
 Redis以0为索引，16383为终止索引，对slots数组中的16384个二进制位进行编号，并根据索引i上的二进制位的值来判断节点是否负责处理槽i。
 
-![https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/slots%E6%95%B0%E7%BB%84%E7%A4%BA%E4%BE%8B.png](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/slots数组示例.png)
+![slots数组示例](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/slots数组示例.png)
 
 上图展示了，当前节点仅处理0～7号槽。
 
@@ -385,7 +385,7 @@ MOVED <slot> <ip>:<port>
 
 当客户端接收到节点返回的moved错误时，客户端会根据moved错误中提供的IP地址和端口号，转向至负责处理槽slot节点，并向该节点重新发送之前想要执行的命令。
 
-![https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-moved%E9%94%99%E8%AF%AF%E6%BC%94%E7%A4%BA.png](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-moved错误演示.png)
+![moved错误演示](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-moved错误演示.png)
 
 一个集群客户端通常会与集群中的多个节点创建套接字连接，而所谓的节点转向实际上就是换一个套接字发送命令。
 
@@ -455,7 +455,7 @@ Redis-trib 对集群中单个槽slot进行重新分片的步骤如下：
 5. 重复执行步骤3与步骤4，知道源节点保存的所有属于槽slot的键值对都被迁移至目标节点为止。迁移过程如下图所示
 6. redis-trib 向集群中的任意一个节点发送cluster setslot <slot> NODE <targe_id> 命令，将槽 slot 指派给目标节点，这一指派信息会通过消息发送至整个集群，最终集群中的所有节点都会知道槽slot 已经指派给了目标节点。
 
-![https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-%E9%94%AE%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B.jpg](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-键迁移过程.jpg)
+![键迁移过程](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-键迁移过程.jpg)
 
 如果重新分片涉及到了多个槽，那么redis-trib将对每个给定的槽分别执行上面给出的步骤。流程图如下：
 
@@ -608,7 +608,7 @@ cluster setslot <i> migrating <source_id>
 
 这个错误表示客户端可以尝试到IP为127.0.0.1，端口号为7003 的节点去执行和槽16198 相关的操作，如下图示：
 
- ![https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-ASK%E9%94%99%E8%AF%AF%E6%BC%94%E7%A4%BA.jpg](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-ASK错误演示.jpg)
+ ![ASK错误演示](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-ASK错误演示.jpg)
 
 接收到ASK错误的客户端会根据错误提供的IP和PORT，转向至正在导入槽点目标节点，然后首先向目标节点发送一个ASKING命令，之后再重新发送原本想要执行的命令。
 
@@ -621,7 +621,7 @@ cluster setslot <i> migrating <source_id>
 
 如下图示：
 
-![https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-asking%E6%BC%94%E7%A4%BA.jpg](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-asking演示.jpg)
+![asking演示](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-asking演示.jpg)
 
 ### ASKING 命令
 
@@ -726,7 +726,7 @@ struct clusterNode {
 
 举例如下：如果节点7001向节点7000发送了一条ping消息，但是节点7000没有在规定的时间内向节点7001返回一条pong消息，那么节点7001就会在自己的clusterState.nodes 字典中找到节点7000所对应的clusterNode结构，并在结构的flags属性中打开 REDIS_NODE_PFALL 标识，以此表示节点7000进入了疑似下线的状态，如下图所示：
 
-![https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-%E8%8A%82%E7%82%B9%E7%96%91%E4%BC%BC%E4%B8%8B%E7%BA%BF.jpg](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-节点疑似下线.jpg)
+![节点疑似下线](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-节点疑似下线.jpg)
 
 集群中各个节点会通过互相发送消息的方式来疾患集群中各个节点的状态信息。例如某个节点是处于在线状态，疑似下线状态（PFAIL）还是已下线状态（FAIL）。
 
@@ -756,7 +756,7 @@ struct clusterNodeFailReport {
 
 举个例子，如果主节点7001在收到主节点7002和7003发送的消息后得知，主节点7002和7003都认为主节点7000进入了疑似下线阶段，那么主节点7001将为主节点7000创建如下图的下线报告：
 
-![https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-%E8%8A%82%E7%82%B9%E4%B8%8B%E7%BA%BF%E6%8A%A5%E5%91%8A.jpg](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-节点下线报告.jpg)
+![节点下线报告](https://raw.githubusercontent.com/Never12581/study-demo/master/other-file/picture/redis/redis-节点下线报告.jpg)
 
 如果在一个集群里，半数以上负责处理槽的主节点都将某个主节点x报告为疑似下线，那么这个主节点x将被标记为已下线（FAIL），将主节点x标记为已下线的节点会向集群广播一条关于主节点x的FAIL消息，所有收到这条FAIL消息的节点都会立即将主节点x标记为已下线。
 
@@ -868,13 +868,132 @@ union clusterMsgData {
 };
 ```
 
+clusterMsg 结构的 currentEpoch、sender、myslots 等属性记录了发送者自身的节点信息，接收者会根据这些信息，在自己的clusterState.nodes 字典里找到发送者对应的clusterNode结构，并对结构进行更新。
 
+举例，通过对比接收者为发送者记录的槽指派信息，以及发送者在消息头的myslots属性记录的槽指派信息，接收者可以知道发送者的槽指派信息是否发生了变化。
+
+又或者说，通过对比接收者为发送者记录的标识值，以及发送者在消息头的flags属性记录的标识值，接收者可以知道发送者的状态和角色是否发生了变化，例如节点状态由原来的在线变成了下线，或者由主节点变成从节点等。
 
 ### meet、ping、pong消息的实现
 
+Redis集群中的各个节点通过Gossip协议来交换各自关于不同节点的状态信息，其中Gossip协议由meet、ping、pong三种消息实现，这三种消息的正文都由两个 cluster.h/clusterMsgDataGossip 结构组成：
+
+```c
+union clusterMsgData {
+    /* PING, MEET and PONG */
+    struct {
+        /* Array of N clusterMsgDataGossip structures */
+        clusterMsgDataGossip gossip[1];
+    } ping;
+
+    /* FAIL */
+    struct {
+        clusterMsgDataFail about;
+    } fail;
+
+    /* PUBLISH */
+    struct {
+        clusterMsgDataPublish msg;
+    } publish;
+
+    /* UPDATE */
+    struct {
+        clusterMsgDataUpdate nodecfg;
+    } update;
+
+    /* MODULE */
+    struct {
+        clusterMsgModule msg;
+    } module;
+};
+```
+
+因为meet、ping、pong 三种消息都是用相同的消息正文，所遇你节点通过下消息头的type 属性来判断一条消息时meet消息，ping消息还是pong消息。
+
+每次发送meet、ping、pong消息时，发送者都从自己已知的节点列表中随机选出两个节点（可以是主节点或者是从节点），并将这两个选中节点的信息分别保存到两个clusterMsgDataGossip 结构里面。
+
+clusterMsgDataGossip结构记录了被选中节点的名字，发送者与被选中节点最后一次发送和接收ping消息和pong消息的时间戳，被选中节点ip地址和port，以及被选中节点的标识值：
+
+```c
+typedef struct {
+    // 节点的名字
+    char nodename[CLUSTER_NAMELEN];
+    // 最后一次向该节点发送ping消息的时间戳
+    uint32_t ping_sent;
+    // 最后一次从该节点接收到pong消息的时间戳
+    uint32_t pong_received;
+  	// 节点ip地址 NET_IP_STR_LEN == 16
+    char ip[NET_IP_STR_LEN];  
+    // 节点端口号
+    uint16_t port;            
+    uint16_t cport;           
+    // 节点标识值
+    uint16_t flags;           
+    uint32_t notused1;
+} clusterMsgDataGossip;
+```
+
+当接收者收到meet、ping、pong消息时，接收者会访问消息正文中的两个clusterMsgDataGossip结构，并根据自己是否认识clusterMsgDataGossip结构中记录的被选中节点来选择进行哪种操作：
+
+- 如果被选中节点不存在于接收者已知节点列表，那么说明接收者是第一次接触到被选中节点，接收者将根据结构中记录的ip和port等信息，与被选中节点进行握手
+- 如果被选中节点已经存在于接收者已知节点列表，那么说明接收者之前已经于被选中节点进行接触，接收者将根据clusterMsgDataGossip结构记录的信息，对被选中节点所对应的clusterNode结构进行更新。
+
+例如，发送ping于pong消息的例子，假设在一个包含A、B、C、D、E、F六个节点的集群里：
+
+- 节点A向节点D发送ping消息，并且消息里面包含了节点B和节点C的信息，当节点D收到这条PING消息时，它将更新自己对节点B和节点C的认识。
+- 之后，节点D将向节点A返回一条pong消息，并且消息里包含了节点E和节点F的信息，当节点A接收到这条pong消息时，它将更新自己对节点E和节点F的认识。
+
 ### fail消息的实现
 
+当集群里的主节点A将主节点B标记为已下线（FAIL）时，主节点A将向集群广播一条关于主节点B的FAIL消息，所有接收到这条FAIL消息的节点都会将主节点B标记为已下线。
+
+在集群的节点数量比较大时，淡出你使用Gossip协议来传播节点的已下线信息会给节点信息更新带来一定的延迟，因为Gossip协议消息通常需要一段时间才能传播至整个集群，<font color='red'>而发送FAIL消息可以让集群里的所有节点立即知道某个主节点已下线</font>，从而尽快判断是否需要将集群标记为下线，又或者对下线主节点进行故障转移。
+
+> <font color='#258'>是什么协议？如何立即？</font>
+
+FAIL消息的正文由cluster.h/clusterMsgDataFail结构表示，这个结构只包含一个nodename属性，该属性记录了已下线节点的名字：
+
+```c
+typedef struct {
+    char nodename[CLUSTER_NAMELEN];
+} clusterMsgDataFail;
+```
+
+因为集群中的所有节点都有一个独一无二的名字，所以FAIL消息里面只需要保存下线节点的名字，接收到消息的节点就可以根据这个名字来判断是哪个节点下线了。
+
 ### publish消息的实现
+
+当客户端向集群中的某个节点发送命令：
+
+publish <channel> <message>
+
+的时候，接收到publish命令的节点不仅会向channel频道发送消息message，它还会向集群广播一条publish消息，所有接收到这条publish消息的节点都会向channel频道发送message消息。
+
+换句话说，向集群中的某个节点发送命令：
+
+publish <channel> <message>
+
+将导致所有节点都向channel频道发送mesage消息。
+
+消息正文由 cluster.h/clusterMsgDataPublish 结构表示：
+
+```c
+typedef struct {
+    // channel 的长度
+    uint32_t channel_len;
+    // mesg的长度
+    uint32_t message_len;
+    // 定义为8字节，目的是为了对齐其他消息结构
+    // 实际长度由保存内容决定
+    unsigned char bulk_data[8]; 
+} clusterMsgDataPublish;
+```
+
+其中 0 ～ channel_len-1 是channel参数，channel_len ~ message_len 是mesg参数。
+
+> #### 为什么不直接向节点广播PUBLISH命令
+>
+> 实际上，要让集群的所有节点都执行相同的PUBLISH 命令，最简单的方法就是向所有节点广播相同的publish 命令，这也是redis 在复制publish 命令时所使用的方法，不过因为这种做法并不符合redis集群的“各个节点通过发送和接收消息来进行通信” 这一规则，所以节点没有采取广播PUBLISH命令的做法。
 
 
 
