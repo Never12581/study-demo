@@ -34,4 +34,5 @@
 
 - 如果在给定的时限中，没有一个sentinel被选举为领头sentinel<font color='red'>(不论选举成功与否，每个sentinel的配置纪元参数+1)</font>，那么sentinel将会在一段时间后再次进行选举，知道选出领头sentinel为止。
 
-#### 
+
+
