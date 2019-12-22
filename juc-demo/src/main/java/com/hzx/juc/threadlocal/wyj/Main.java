@@ -22,12 +22,13 @@ public class Main {
                 } else {
                     // 当作子线程
                     new Thread(()->{
-                        // 自增1
 
                         // 从 父 线程中，获取当前 的 AtomicInteger 对象
                         AtomicInteger atomicInteger = TContext.get();
+
                         System.out.println(ac == atomicInteger);
                         System.out.println(Thread.currentThread().getName()+"-----"+atomicInteger.get());
+                        // 自增1
                         atomicInteger.incrementAndGet();
                     }).start();
                 }
