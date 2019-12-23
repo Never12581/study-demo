@@ -330,6 +330,108 @@ typedef struct zskiplist {
 
 ## 对象
 
+### 对象的类型与编码
+
+```c
+typedef struct redisObject {
+  // 类型
+  unsigned type:4;
+  // 编码
+  unsigned encoding:4;
+  // 指向底层数据结构的指针
+  void *ptr;
+  // ```
+} robj;
+```
+
+#### 类型
+
+type 属性标识了对象的类型，该属性的值请见下表：
+
+| 类型常量     | 对象的名称   | TYPE命令的输出 |
+| ------------ | ------------ | -------------- |
+| REDIS_STRING | 字符串对象   | “string”       |
+| REDIS_LIST   | 列表对象     | “list”         |
+| REDIS_HASH   | 哈希对象     | “hash“         |
+| REDIS_SET    | 集合对象     | ”set“          |
+| REDIS_ZSET   | 有序集合对象 | ”zset“         |
+
+type <key> 该命令可以返回当前key的值的类型。
+
+#### 编码与底层实现
+
+ptr 指针指向对象的底层实现的数据结构，而这些数据结构由对象的 encoding 属性决定。
+
+encoding属性记录了对象所使用的编码，也即是说这个对象使用了什么样的数据结构作为对象的底层实现，属性的值可以是下表中任意一个：
+
+| 编码常量                  | 编码所对应的底层数据结构    | OBJECT ENCODING 命令输出 |
+| ------------------------- | --------------------------- | ------------------------ |
+| REDIS_ENCODING_INT        | long类型的整数              | “int“                    |
+| REDIS_ENCODING_EMBSTR     | embstr 编码的简单动态字符串 | ”embstr“                 |
+| REDIS_ENCODING_RAW        | 简单动态字符串              | ”raw“                    |
+| REDIS_ENCODING_HT         | 字典                        | ”hashtable“              |
+| REDIS_ENCODING_LINKEDLIST | 双端链表                    | ”linkedlist“             |
+| REDIS_ENCODING_ZIPLIST    | 压缩链表                    | ”ziplist“                |
+| REDIS_ENCODING_INTSET     | 整数结合                    | ”intset“                 |
+| REDIS_ENCODING_SKIPLIST   | 跳跃表与字典                | ”skiplist”               |
+
+每种类型的变量都至少使用了两种不同的编码，下表列出每种类型的对象可以使用的编码
+
+| 类型         | 编码                      | 对象                                            |
+| ------------ | ------------------------- | ----------------------------------------------- |
+| REDIS_STRING | REDIS_ENCODING_INT        | 使用long类型的整数实现的字符串对象              |
+| REDIS_STRING | REDIS_ENCODING_EMBSTR     | 使用embstr 编码的简单动态字符串实现的字符串对象 |
+| REDIS_STRING | REDIS_ENCODING_RAW        | 使用简单动态字符串实现的字符串对象              |
+| REDIS_LIST   | REDIS_ENCODING_LINKEDLIST | 使用双端列表实现的列表对象                      |
+| REDIS_LIST   | REDIS_ENCODING_ZIPLIST    | 使用压缩列表实现的列表对象                      |
+| REDIS_HASH   | REDIS_ENCODING_HT         | 使用字典实现的哈希对象                          |
+| REDIS_HASH   | REDIS_ENCODING_ZIPLIST    | 使用压缩列表实现的哈希对象                      |
+| REDIS_SET    | REDIS_ENCODING_INTSET     | 使用整数结合实现的集合对象                      |
+| REDIS_SET    | REDIS_ENCODING_HT         | 使用字典实现的集合对象                          |
+| REDIS_ZSET   | REDIS_ENCODING_ZIPLIST    | 使用压缩列表实现的有序集合对象                  |
+| REDIS_ZSET   | REDIS_ENCODING_SKIPLIST   | 使用跳跃表实现的有序集合对象                    |
+
+#### 图形梳理
+
+```mermaid
+graph LR
+
+string((字符串对象))
+list((列表对象))
+hash((哈希对象))
+set((集合对象))
+zset((有序集合对象))
+
+int(long类型的整数)
+embstr(embstr编码动态字符串)
+raw(简单编码动态字符串)
+hashtable(字典)
+linkedlist(双端链表)
+ziplist(压缩链表)
+intset(整数集)
+skiplist(跳跃表和字典)
+
+
+string --- int
+string --- embstr
+string --- raw
+
+
+hash --- hashtable
+hash --- ziplist
+
+set --- intset
+set --- hashtable
+
+zset --- ziplist
+zset --- skiplist
+
+list --- linkedlist
+list --- ziplist
+```
+
+
+
 ### 回顾
 
 - redis数据库中的每一个键和值都是一个对象

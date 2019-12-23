@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
  * @author: bocai.huang
  * @create: 2019-09-19 14:39
  **/
-@Component
 public class TestTimeTask {
 
     final Map<String,String> map = new HashMap<>();

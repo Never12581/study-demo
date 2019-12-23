@@ -1,7 +1,6 @@
 package com.hzx.tree;
 
 import com.hzx.tree.abstracts.Tree;
-import com.hzx.tree.avl.AVLTree;
 import com.hzx.tree.binary.BinarySearchTree;
 import com.hzx.tree.binary.BinarySearchTree_MYINE;
 import org.slf4j.Logger;

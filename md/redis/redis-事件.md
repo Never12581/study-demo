@@ -149,7 +149,7 @@ ae.c/aeGetApiName 函数返回I/O多路复用程序底层所嗲用的I/O多路�
 
 Redis 为文件事件编写了多个处理器，这些事件处理器分别用于实现不同的网络通信需求，比如说：
 
-- 为了对连接服务器的哥哥客户端进行应答，服务器要为监听套接字关联连接应答处理器。
+- 为了对连接服务器的各个客户端进行应答，服务器要为监听套接字关联连接应答处理器。
 - 为了接受客户端传来的命令请求，服务器要为客户端套接字关联命令请求处理器。
 - 为了向客户端返回命令的执行结果，服务器要为客户端套接字关联命令回复处理器。
 - 当主服务器和从服务器进行复制操作时，主从服务器都需要关联特别为复制功能编写的复制处理器。
@@ -252,24 +252,24 @@ graph LR
 title[时间事件链表1]
 
 time_events --> id:3
-subgraph time_event1
+subgraph time_event3
 id:3 
 when:138...
-timeProc:handler_3
+timeProc:handler-3
 end
 
 id:3 --> id:2
 subgraph time_event2
 id:2 
 when:158...
-timeProc:handler_2
+timeProc:handler-2
 end
 
 id:2 --> id:1
 subgraph time_event1
 id:1
 when:188...
-timeProc:handler_1
+timeProc:handler-1
 end
   
 ```
@@ -297,14 +297,14 @@ time_events --> id:2
 subgraph time_event2
 id:2 
 when:158...
-timeProc:handler_2
+timeProc:handler-2
 end
 
 id:2 --> id:1
 subgraph time_event1
 id:1
 when:188...
-timeProc:handler_1
+timeProc:handler-1
 end
   
 ```
@@ -381,11 +381,11 @@ def main():
 graph TD
 
 start_server[启动服务器] --> is_close{是否关闭服务器}
-is_close --是--> close_server[关闭服务器]
 
 is_close --否--> wait_file_events[等待文件事件产生]
 wait_file_events --> proc_exist_file_events[处理已产生的文件事件]
 proc_exist_file_events --> arrive_time_events[处理已到达的时间事件]
+is_close --是--> close_server[关闭服务器]
 
 arrive_time_events --开始新的循环--> is_close
 ```
@@ -398,7 +398,7 @@ arrive_time_events --开始新的循环--> is_close
 
 3. 对文件事件和时间事件的处理都是同步、有序、原子地执行，服务器不会中途中断事件处理 ，也不会对事件进行抢占，因此，文件事件和时间事件都会尽可能地减少程序对阻塞事件，并在有需要时主动让出执行权，从而降低事件饥饿的可能性。
 
-   > 比如说，在命令回复处理器将一个命令回复卸乳到客户端套接字时，如果卸乳子结束超过了一个预设常量的话，命令回复处理器就会主动break跳出写入循环，将余下的数据流到下次再写；另外，时间事件也会将非常耗时的持久化操作放到子线程或者子进程中处理。
+   > 比如说，在命令回复处理器将一个命令回复写入到客户端套接字时，如果卸乳子结束超过了一个预设常量的话，命令回复处理器就会主动break跳出写入循环，将余下的数据流到下次再写；另外，时间事件也会将非常耗时的持久化操作放到子线程或者子进程中处理。
 
 4. 因为时间事件在文件事件之后执行，并且事件之间不会出现抢占，所以时间事件的实际处理时间，通常会比时间事件设定的到达时间晚一点
 
