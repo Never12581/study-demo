@@ -66,7 +66,7 @@ open_aof --> |否|road_rdb[载入rdb文件]
 ```mermaid
 graph LR
 
-db_status((数据库状态)) --> |rdbSave|rdb_file((RDB文件))
+db_status((数据库状态)) --rdbSave--> rdb_file((RDB文件))
 rdb_file --> |rdbLoad| db_status
 ```
 
