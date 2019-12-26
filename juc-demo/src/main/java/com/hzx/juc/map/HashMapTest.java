@@ -25,16 +25,20 @@ public class HashMapTest {
 
     public static void main(String[] args) {
         // String s = "adsfsasdfzxcvadf156as4d6f5aadf4s65df4a";
-        String s = "a";
+        String s = "1";// 1 与8 可以作为例子
         int length = 8 ;
         System.out.println("hash:"+hash(s));
-        System.out.println("map中的下标 "+calcuIndex(hash(s),length) ) ;
+        System.out.println("map中的下标 "+calcuIndex(hash(s),length-1) ) ;
         System.out.println("hash & oldTabl " + (hash(s)& 8));
         System.out.println("=================================");
         length = 8 << 1 ;
         System.out.println("hash:"+hash(s));
-        System.out.println("新map中的下标 "+calcuIndex(hash(s),length) );
+        System.out.println("新map中的下标 "+calcuIndex(hash(s),length-1) );
         System.out.println("hash & oldTabl " + (hash(s)& 8));
+
+        System.out.println("=================================");
+        System.out.println("计算方法");
+        System.out.println(hash(s)&8);
 
     }
 

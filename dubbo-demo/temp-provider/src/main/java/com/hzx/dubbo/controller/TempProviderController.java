@@ -17,10 +17,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/")
 public class TempProviderController {
 
+    private GenericService gs ;
+
     @GetMapping
     public String testG(){
+
+
+        GenericService gs = getGenericService();
+        Object result = gs.$invoke("test4G",new String[]{"java.lang.String"},new Object[]{"哈哈哈"});
+
+        System.out.println(result);
+        return (String) result;
+    }
+
+    private GenericService getGenericService(){
+        if (gs != null) {
+            return gs;
+        }
         ReferenceConfig<GenericService> ref = new ReferenceConfig<>();
-        ApplicationConfig appConfig = new ApplicationConfig("temp-provider");
+        ApplicationConfig appConfig = new ApplicationConfig("temp-consumer");
 
         RegistryConfig registryConfig = new RegistryConfig();
         registryConfig.setProtocol("zookeeper");
@@ -32,12 +47,7 @@ public class TempProviderController {
 
         ref.setInterface("com.hzx.dubbo.service.GService");
         ref.setGeneric(true);
-
-        GenericService gs = ref.get();
-        Object result = gs.$invoke("test4G",new String[]{"java.lang.String"},new Object[]{"哈哈哈"});
-
-        System.out.println(result);
-        return (String) result;
+        return gs = ref.get();
     }
 
 }
