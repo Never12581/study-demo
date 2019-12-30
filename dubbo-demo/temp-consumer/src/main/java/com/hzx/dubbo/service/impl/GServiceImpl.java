@@ -15,7 +15,7 @@ public class GServiceImpl implements GService {
 
     @Override
     public String test4G(String gtest) {
-        log.info("【接收到的参数:】{}", gtest);
+//        log.info("【接收到的参数:】{}", gtest);
         return "【返回参数】：" + gtest;
     }
 
