@@ -41,7 +41,7 @@
         <module>tree-demo</module>
         <!--<module>netty-demo</module>-->
         <module>design-demo</module>
-        <!--<module>Leetcode</module>-->
+        <module>Leetcode</module>
         <module>data</module>
         <module>monitor</module>
         <module>stream-demo</module>
