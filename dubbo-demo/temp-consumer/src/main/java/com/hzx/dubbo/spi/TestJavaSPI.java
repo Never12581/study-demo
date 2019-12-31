@@ -17,6 +17,8 @@ public class TestJavaSPI {
             GService search = iterator.next();
             System.out.println(search.test4G("哈哈哈"));
         }
+
+
     }
 
 }
