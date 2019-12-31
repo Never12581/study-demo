@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration>
+    <property name="APP_NAME" value="web-intranet-config"/>
+    <property name="level" value="${logLevel:-info}"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!--<pattern>%date %level %logger{10} [%file:%line] ${APP_NAME} %msg%n</pattern>-->
+            <pattern>%date %5level %6relative --- [%15thread] [%-40logger{40}] [%C:%L] : [%X{traceId:-0}] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="${level}">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <logger name="io.terminus.license" level="OFF"/>
+    <logger name="io.terminus.pampas.webc.controller" level="OFF"/>
+    <!--<logger name="cn.gov.zcy.qyg.center.dao" level="DEBUG" />-->
+    <!--<logger name="cn.gov.zcy.qyg.center.mapper" level="DEBUG" />-->
+
+</configuration>
