@@ -1,5 +1,7 @@
 package com.hzx.day01;
 
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel.MapMode;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -25,6 +27,32 @@ import java.nio.file.StandardOpenOption;
  * 3. 选择器（selector）：是 SeletableChannel 的多路复用器，用于监控 SelectableChannel 的IO 状况
  */
 public class TestBlockingNIO2 {
+
+    @Test
+    public void copyTest() throws IOException {
+
+        long start = System.currentTimeMillis();
+        for(int i = 0 ; i < 10 ; i++) {
+            String fileName = "/Users/huangbocai/study-data/MySQL实战45讲.zip";
+
+            FileChannel inChannel = FileChannel
+                .open(Paths.get(fileName), StandardOpenOption.READ, StandardOpenOption.WRITE);
+
+            MappedByteBuffer mappedByteBuffer = inChannel.map(MapMode.READ_WRITE, 0, inChannel.size());
+
+            FileChannel outChannel = FileChannel.open(Paths.get(fileName + "xxxx"+i), StandardOpenOption.CREATE,
+                StandardOpenOption.WRITE);
+
+            outChannel.write(mappedByteBuffer);
+
+            mappedByteBuffer.clear();
+            outChannel.close();
+            inChannel.close();
+        }
+
+        System.out.println("cost time ：" + String.valueOf(System.currentTimeMillis() - start));
+
+    }
 
     @Test
     public void client() throws IOException {
