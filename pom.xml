@@ -39,13 +39,14 @@
         <module>sentinel-demo</module>
         <module>sort-demo</module>
         <module>tree-demo</module>
-        <!--<module>netty-demo</module>-->
+        <module>netty-demo</module>
         <module>design-demo</module>
         <module>Leetcode</module>
         <module>data</module>
         <module>monitor</module>
         <module>stream-demo</module>
         <module>dubbo-demo</module>
+        <module>nio-demo</module>
     </modules>
 
     <dependencyManagement>
