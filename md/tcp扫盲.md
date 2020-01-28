@@ -1,4 +1,11 @@
+### 零、别人家的优秀文章
+
+https://mp.weixin.qq.com/s?__biz=MzI3MTQ1NzU2NA==&mid=2247484003&idx=1&sn=04a690cb1f6bb5550f5e3f4ecf4f2a6e&chksm=eac0ce10ddb7470649f5a21e0d3ee31169f121d60334c54320c4be2db5cdd47d4e7dfd300834&scene=21#wechat_redirect
+
+
+
 ### 一、tcp头部解释
+
 ![tcp头部](https://images2017.cnblogs.com/blog/822287/201712/822287-20171220194113475-1709447191.png)
 
 **16位源，目的端口号**：标示该段保文来自哪里（源端口）以及要传给哪个上层协议或者应用程序（目的端口）。
