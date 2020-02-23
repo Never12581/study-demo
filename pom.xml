@@ -47,6 +47,7 @@
         <module>stream-demo</module>
         <module>dubbo-demo</module>
         <module>nio-demo</module>
+        <module>grpc-demo</module>
     </modules>
 
     <dependencyManagement>
