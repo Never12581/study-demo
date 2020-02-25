@@ -24,16 +24,6 @@ public final class HelloWorldProto {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_helloworld_HelloReply_fieldAccessorTable;
-  static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_helloworld_HahahaRequest_descriptor;
-  static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_helloworld_HahahaRequest_fieldAccessorTable;
-  static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_helloworld_HahahaResponse_descriptor;
-  static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_helloworld_HahahaResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -45,13 +35,10 @@ public final class HelloWorldProto {
     java.lang.String[] descriptorData = {
       "\n\017helloword.proto\022\nhelloworld\"\034\n\014HelloRe" +
       "quest\022\014\n\004name\030\001 \001(\t\"\035\n\nHelloReply\022\017\n\007mes" +
-      "sage\030\001 \001(\t\"\035\n\rHahahaRequest\022\014\n\004name\030\001 \001(" +
-      "\t\"!\n\016HahahaResponse\022\017\n\007message\030\001 \001(\t2\214\001\n" +
-      "\007Greeter\022>\n\010SayHello\022\030.helloworld.HelloR" +
-      "equest\032\026.helloworld.HelloReply\"\000\022A\n\006Haha" +
-      "ha\022\031.helloworld.HahahaRequest\032\032.hellowor" +
-      "ld.HahahaResponse\"\000B!\n\014com.hzx.grpcB\017Hel" +
-      "loWorldProtoP\001b\006proto3"
+      "sage\030\001 \001(\t2I\n\007Greeter\022>\n\010SayHello\022\030.hell" +
+      "oworld.HelloRequest\032\026.helloworld.HelloRe" +
+      "ply\"\000B!\n\014com.hzx.grpcB\017HelloWorldProtoP\001" +
+      "b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -68,18 +55,6 @@ public final class HelloWorldProto {
     internal_static_helloworld_HelloReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_helloworld_HelloReply_descriptor,
-        new java.lang.String[] { "Message", });
-    internal_static_helloworld_HahahaRequest_descriptor =
-      getDescriptor().getMessageTypes().get(2);
-    internal_static_helloworld_HahahaRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_helloworld_HahahaRequest_descriptor,
-        new java.lang.String[] { "Name", });
-    internal_static_helloworld_HahahaResponse_descriptor =
-      getDescriptor().getMessageTypes().get(3);
-    internal_static_helloworld_HahahaResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_helloworld_HahahaResponse_descriptor,
         new java.lang.String[] { "Message", });
   }
 

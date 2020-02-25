@@ -61,37 +61,6 @@ public final class GreeterGrpc {
     return getSayHelloMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<com.hzx.grpc.HahahaRequest,
-      com.hzx.grpc.HahahaResponse> getHahahaMethod;
-
-  @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "Hahaha",
-      requestType = com.hzx.grpc.HahahaRequest.class,
-      responseType = com.hzx.grpc.HahahaResponse.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<com.hzx.grpc.HahahaRequest,
-      com.hzx.grpc.HahahaResponse> getHahahaMethod() {
-    io.grpc.MethodDescriptor<com.hzx.grpc.HahahaRequest, com.hzx.grpc.HahahaResponse> getHahahaMethod;
-    if ((getHahahaMethod = GreeterGrpc.getHahahaMethod) == null) {
-      synchronized (GreeterGrpc.class) {
-        if ((getHahahaMethod = GreeterGrpc.getHahahaMethod) == null) {
-          GreeterGrpc.getHahahaMethod = getHahahaMethod =
-              io.grpc.MethodDescriptor.<com.hzx.grpc.HahahaRequest, com.hzx.grpc.HahahaResponse>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "Hahaha"))
-              .setSampledToLocalTracing(true)
-              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.hzx.grpc.HahahaRequest.getDefaultInstance()))
-              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.hzx.grpc.HahahaResponse.getDefaultInstance()))
-              .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("Hahaha"))
-              .build();
-        }
-      }
-    }
-    return getHahahaMethod;
-  }
-
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -132,13 +101,6 @@ public final class GreeterGrpc {
       asyncUnimplementedUnaryCall(getSayHelloMethod(), responseObserver);
     }
 
-    /**
-     */
-    public void hahaha(com.hzx.grpc.HahahaRequest request,
-        io.grpc.stub.StreamObserver<com.hzx.grpc.HahahaResponse> responseObserver) {
-      asyncUnimplementedUnaryCall(getHahahaMethod(), responseObserver);
-    }
-
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -148,13 +110,6 @@ public final class GreeterGrpc {
                 com.hzx.grpc.HelloRequest,
                 com.hzx.grpc.HelloReply>(
                   this, METHODID_SAY_HELLO)))
-          .addMethod(
-            getHahahaMethod(),
-            asyncUnaryCall(
-              new MethodHandlers<
-                com.hzx.grpc.HahahaRequest,
-                com.hzx.grpc.HahahaResponse>(
-                  this, METHODID_HAHAHA)))
           .build();
     }
   }
@@ -190,14 +145,6 @@ public final class GreeterGrpc {
       asyncUnaryCall(
           getChannel().newCall(getSayHelloMethod(), getCallOptions()), request, responseObserver);
     }
-
-    /**
-     */
-    public void hahaha(com.hzx.grpc.HahahaRequest request,
-        io.grpc.stub.StreamObserver<com.hzx.grpc.HahahaResponse> responseObserver) {
-      asyncUnaryCall(
-          getChannel().newCall(getHahahaMethod(), getCallOptions()), request, responseObserver);
-    }
   }
 
   /**
@@ -229,13 +176,6 @@ public final class GreeterGrpc {
     public com.hzx.grpc.HelloReply sayHello(com.hzx.grpc.HelloRequest request) {
       return blockingUnaryCall(
           getChannel(), getSayHelloMethod(), getCallOptions(), request);
-    }
-
-    /**
-     */
-    public com.hzx.grpc.HahahaResponse hahaha(com.hzx.grpc.HahahaRequest request) {
-      return blockingUnaryCall(
-          getChannel(), getHahahaMethod(), getCallOptions(), request);
     }
   }
 
@@ -270,18 +210,9 @@ public final class GreeterGrpc {
       return futureUnaryCall(
           getChannel().newCall(getSayHelloMethod(), getCallOptions()), request);
     }
-
-    /**
-     */
-    public com.google.common.util.concurrent.ListenableFuture<com.hzx.grpc.HahahaResponse> hahaha(
-        com.hzx.grpc.HahahaRequest request) {
-      return futureUnaryCall(
-          getChannel().newCall(getHahahaMethod(), getCallOptions()), request);
-    }
   }
 
   private static final int METHODID_SAY_HELLO = 0;
-  private static final int METHODID_HAHAHA = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -303,10 +234,6 @@ public final class GreeterGrpc {
         case METHODID_SAY_HELLO:
           serviceImpl.sayHello((com.hzx.grpc.HelloRequest) request,
               (io.grpc.stub.StreamObserver<com.hzx.grpc.HelloReply>) responseObserver);
-          break;
-        case METHODID_HAHAHA:
-          serviceImpl.hahaha((com.hzx.grpc.HahahaRequest) request,
-              (io.grpc.stub.StreamObserver<com.hzx.grpc.HahahaResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -370,7 +297,6 @@ public final class GreeterGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new GreeterFileDescriptorSupplier())
               .addMethod(getSayHelloMethod())
-              .addMethod(getHahahaMethod())
               .build();
         }
       }

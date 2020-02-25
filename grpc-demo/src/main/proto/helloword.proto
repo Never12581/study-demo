@@ -11,7 +11,6 @@ service Greeter {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply) {}
 
-  rpc Hahaha (HahahaRequest) returns (HahahaResponse){}
 }
 
 // The request message containing the user's name.
@@ -24,12 +23,3 @@ message HelloReply {
   string message = 1;
 }
 
-
-message HahahaRequest{
-    string name = 1 ;
-}
-
-
-message HahahaResponse {
-    string message = 1 ;
-}
