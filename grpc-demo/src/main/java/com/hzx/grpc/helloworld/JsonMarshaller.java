@@ -1,4 +1,4 @@
-package com.hzx.grpc;
+package com.hzx.grpc.helloworld;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;

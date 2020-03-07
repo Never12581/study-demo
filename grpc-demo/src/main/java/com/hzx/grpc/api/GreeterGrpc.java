@@ -1,4 +1,4 @@
-package com.hzx.grpc;
+package com.hzx.grpc.api;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 import static io.grpc.stub.ClientCalls.asyncBidiStreamingCall;
@@ -22,37 +22,37 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
  */
 @javax.annotation.Generated(
     value = "by gRPC proto compiler (version 1.24.0)",
-    comments = "Source: helloword.proto")
+    comments = "Source: api.proto")
 public final class GreeterGrpc {
 
   private GreeterGrpc() {}
 
-  public static final String SERVICE_NAME = "helloworld.Greeter";
+  public static final String SERVICE_NAME = "api.Greeter";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<com.hzx.grpc.HelloRequest,
-      com.hzx.grpc.HelloReply> getSayHelloMethod;
+  private static volatile io.grpc.MethodDescriptor<com.hzx.grpc.api.HelloRequest,
+      com.hzx.grpc.api.HelloReply> getSayHelloMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "SayHello",
-      requestType = com.hzx.grpc.HelloRequest.class,
-      responseType = com.hzx.grpc.HelloReply.class,
+      requestType = com.hzx.grpc.api.HelloRequest.class,
+      responseType = com.hzx.grpc.api.HelloReply.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<com.hzx.grpc.HelloRequest,
-      com.hzx.grpc.HelloReply> getSayHelloMethod() {
-    io.grpc.MethodDescriptor<com.hzx.grpc.HelloRequest, com.hzx.grpc.HelloReply> getSayHelloMethod;
+  public static io.grpc.MethodDescriptor<com.hzx.grpc.api.HelloRequest,
+      com.hzx.grpc.api.HelloReply> getSayHelloMethod() {
+    io.grpc.MethodDescriptor<com.hzx.grpc.api.HelloRequest, com.hzx.grpc.api.HelloReply> getSayHelloMethod;
     if ((getSayHelloMethod = GreeterGrpc.getSayHelloMethod) == null) {
       synchronized (GreeterGrpc.class) {
         if ((getSayHelloMethod = GreeterGrpc.getSayHelloMethod) == null) {
           GreeterGrpc.getSayHelloMethod = getSayHelloMethod =
-              io.grpc.MethodDescriptor.<com.hzx.grpc.HelloRequest, com.hzx.grpc.HelloReply>newBuilder()
+              io.grpc.MethodDescriptor.<com.hzx.grpc.api.HelloRequest, com.hzx.grpc.api.HelloReply>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "SayHello"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.hzx.grpc.HelloRequest.getDefaultInstance()))
+                  com.hzx.grpc.api.HelloRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.hzx.grpc.HelloReply.getDefaultInstance()))
+                  com.hzx.grpc.api.HelloReply.getDefaultInstance()))
               .setSchemaDescriptor(new GreeterMethodDescriptorSupplier("SayHello"))
               .build();
         }
@@ -96,8 +96,8 @@ public final class GreeterGrpc {
      * Sends a greeting
      * </pre>
      */
-    public void sayHello(com.hzx.grpc.HelloRequest request,
-        io.grpc.stub.StreamObserver<com.hzx.grpc.HelloReply> responseObserver) {
+    public void sayHello(com.hzx.grpc.api.HelloRequest request,
+        io.grpc.stub.StreamObserver<com.hzx.grpc.api.HelloReply> responseObserver) {
       asyncUnimplementedUnaryCall(getSayHelloMethod(), responseObserver);
     }
 
@@ -107,8 +107,8 @@ public final class GreeterGrpc {
             getSayHelloMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                com.hzx.grpc.HelloRequest,
-                com.hzx.grpc.HelloReply>(
+                com.hzx.grpc.api.HelloRequest,
+                com.hzx.grpc.api.HelloReply>(
                   this, METHODID_SAY_HELLO)))
           .build();
     }
@@ -140,8 +140,8 @@ public final class GreeterGrpc {
      * Sends a greeting
      * </pre>
      */
-    public void sayHello(com.hzx.grpc.HelloRequest request,
-        io.grpc.stub.StreamObserver<com.hzx.grpc.HelloReply> responseObserver) {
+    public void sayHello(com.hzx.grpc.api.HelloRequest request,
+        io.grpc.stub.StreamObserver<com.hzx.grpc.api.HelloReply> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getSayHelloMethod(), getCallOptions()), request, responseObserver);
     }
@@ -173,7 +173,7 @@ public final class GreeterGrpc {
      * Sends a greeting
      * </pre>
      */
-    public com.hzx.grpc.HelloReply sayHello(com.hzx.grpc.HelloRequest request) {
+    public com.hzx.grpc.api.HelloReply sayHello(com.hzx.grpc.api.HelloRequest request) {
       return blockingUnaryCall(
           getChannel(), getSayHelloMethod(), getCallOptions(), request);
     }
@@ -205,8 +205,8 @@ public final class GreeterGrpc {
      * Sends a greeting
      * </pre>
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.hzx.grpc.HelloReply> sayHello(
-        com.hzx.grpc.HelloRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<com.hzx.grpc.api.HelloReply> sayHello(
+        com.hzx.grpc.api.HelloRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getSayHelloMethod(), getCallOptions()), request);
     }
@@ -232,8 +232,8 @@ public final class GreeterGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_SAY_HELLO:
-          serviceImpl.sayHello((com.hzx.grpc.HelloRequest) request,
-              (io.grpc.stub.StreamObserver<com.hzx.grpc.HelloReply>) responseObserver);
+          serviceImpl.sayHello((com.hzx.grpc.api.HelloRequest) request,
+              (io.grpc.stub.StreamObserver<com.hzx.grpc.api.HelloReply>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -257,7 +257,7 @@ public final class GreeterGrpc {
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return com.hzx.grpc.HelloWorldProto.getDescriptor();
+      return com.hzx.grpc.api.HelloWorldProto.getDescriptor();
     }
 
     @java.lang.Override

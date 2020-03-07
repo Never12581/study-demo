@@ -1,4 +1,4 @@
-package com.hzx.grpc;
+package com.hzx.grpc.helloworld;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
