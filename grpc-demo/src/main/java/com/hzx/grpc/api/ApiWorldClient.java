@@ -34,9 +34,9 @@ public class ApiWorldClient {
 
     public static void main(String[] args) throws InterruptedException { 
         ApiWorldClient client = new ApiWorldClient("127.0.0.1",50051);
-        for(int i=0;i<5;i++){
-            client.greet("world:"+i);
-        }
+        client.greet("world:12138");
+//        for(int i=0;i<5;i++){
+//        }
 
 
     } 
