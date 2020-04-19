@@ -48,6 +48,7 @@
         <module>dubbo-demo</module>
         <module>nio-demo</module>
         <module>grpc-demo</module>
+        <module>nowcoder</module>
     </modules>
 
     <dependencyManagement>
