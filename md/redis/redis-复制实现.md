@@ -310,7 +310,7 @@ typedef struct client {
 
 其中replication_offset是从服务器当前的复制偏移量。
 
-发送该命令对于著丛服务器有三个作用：
+发送该命令对于主从服务器有三个作用：
 
 - 检测主服务器的网络连接状态
 - 辅助实现min-slaves选项
