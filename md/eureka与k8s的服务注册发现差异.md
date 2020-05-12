@@ -1,11 +1,6 @@
-## eureka
+## eureka服务发现
 
-拷贝自 https://mp.weixin.qq.com/s/AhRYd0Iwrxb_nsN4F9E9DQ ，加上部分自己理解
-
-### 总结
-
-- 服务端（指配置服务）
-  1. 高可用：集群部署，各个服务端之间数据同步
+参考自 https://mp.weixin.qq.com/s/AhRYd0Iwrxb_nsN4F9E9DQ ，加上部分自己理解
 
 ### 组件调用关系
 
@@ -166,3 +161,6 @@ TaskExecutor.BatchWorkerRunnable是个线程池，不断的从batchWorkQueue队�
 >
 > 另一个是当同步失败时，会将失败的TaskHolder保存到reprocessQueue中，重试处理。
 
+## k8s 服务发现与负载均衡
+
+https://blog.csdn.net/zimu312500/article/details/100902689
