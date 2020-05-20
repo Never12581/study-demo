@@ -1,6 +1,5 @@
 package com.hzx.data;
 
-import com.hzx.data.controller.TutorialController;
 import io.jaegertracing.Configuration;
 import io.jaegertracing.internal.JaegerTracer;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +16,6 @@ public class DataApplication {
 
         ApplicationContext context = SpringApplication.run(DataApplication.class, args);
         log.info("TutorialApplication started");
-
-        TutorialController commandController = context.getBean(TutorialController.class);
-        commandController.init();
     }
 
     @Bean
