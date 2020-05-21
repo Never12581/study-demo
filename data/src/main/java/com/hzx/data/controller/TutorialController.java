@@ -11,8 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
@@ -21,13 +23,10 @@ import java.util.NoSuchElementException;
 @Api(value = "jaegertutorial", description = "Jaeger Tutorial service")
 public class TutorialController {
 
+    @Resource
     private EmployeeService employeeService;
+    @Resource
     private Tracer tracer;
-
-    public TutorialController(Tracer tracer, EmployeeService employeeService) {
-        this.tracer = tracer;
-        this.employeeService = employeeService;
-    }
 
 
     @PostConstruct
@@ -114,6 +113,11 @@ public class TutorialController {
 
         log.info("Receive Request to Get All Employees");
         Collection<Employee> employees = employeeService.loadAllEmployees();
+
+
+        RestTemplate restTemplate = new RestTemplate();
+        String o = restTemplate.getForObject("http://localhost:8888/get",String.class);
+        log.info("o:{}",o.toString());
 
         span.finish();
         return new ResponseEntity<>(employees, HttpStatus.OK);
