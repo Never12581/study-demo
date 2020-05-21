@@ -2,19 +2,25 @@ package com.hzx.data.controller;
 
 import com.google.common.collect.ImmutableMap;
 import com.hzx.data.model.Employee;
+import com.hzx.data.model.RequestBuilderCarrier;
 import com.hzx.data.service.EmployeeService;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
+import io.opentracing.propagation.Format;
+import io.opentracing.tag.Tags;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
@@ -117,8 +123,32 @@ public class TutorialController {
         Collection<Employee> employees = employeeService.loadAllEmployees();
 
 
-        String o = restTemplate.getForObject("http://localhost:8888/get",String.class);
-        log.info("o:{}",o);
+        String url = "http://localhost:8888/get";
+        OkHttpClient client = new OkHttpClient();
+        Request.Builder request = new Request.Builder()
+                .url(url)
+                .get();
+
+
+        Tags.SPAN_KIND.set(span, Tags.SPAN_KIND_CLIENT);
+        Tags.HTTP_METHOD.set(span, "GET");
+        Tags.HTTP_URL.set(span, url);
+        tracer.activeSpan();
+
+        tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS, new RequestBuilderCarrier(request));
+
+        client.newCall(request.build()).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                System.out.println(response.body().string());
+            }
+        });
+
 
         span.finish();
         return new ResponseEntity<>(employees, HttpStatus.OK);
