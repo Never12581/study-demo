@@ -27,6 +27,8 @@ public class TutorialController {
     private EmployeeService employeeService;
     @Resource
     private Tracer tracer;
+    @Resource
+    private RestTemplate restTemplate;
 
 
     @PostConstruct
@@ -115,9 +117,8 @@ public class TutorialController {
         Collection<Employee> employees = employeeService.loadAllEmployees();
 
 
-        RestTemplate restTemplate = new RestTemplate();
         String o = restTemplate.getForObject("http://localhost:8888/get",String.class);
-        log.info("o:{}",o.toString());
+        log.info("o:{}",o);
 
         span.finish();
         return new ResponseEntity<>(employees, HttpStatus.OK);
