@@ -29,6 +29,7 @@
         <io.jaegertracing.version>0.33.1</io.jaegertracing.version>
         <opentracing.contrib.version>0.2.1</opentracing.contrib.version>
         <jaeger-core.version>0.24.0</jaeger-core.version>
+        <javassist.version>3.24.1-GA</javassist.version>
     </properties>
 
     <packaging>pom</packaging>
@@ -37,7 +38,6 @@
         <module>fescar-demo</module>
         <module>hystrix-demo</module>
         <module>juc-demo</module>
-        <module>nacos-demo</module>
         <module>quartz-demo</module>
         <module>sc-demo</module>
         <module>sentinel-demo</module>
@@ -54,10 +54,17 @@
         <module>nio-demo</module>
         <module>grpc-demo</module>
         <module>nowcoder</module>
+        <module>agent-demo</module>
+        <module>agent-test</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassist.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>io.jaegertracing</groupId>

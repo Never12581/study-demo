@@ -2,11 +2,11 @@ package com.hzx.data.controller;
 
 import com.google.common.collect.ImmutableMap;
 import com.hzx.data.model.Employee;
-import com.hzx.data.model.RequestBuilderCarrier;
 import com.hzx.data.service.EmployeeService;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.propagation.Format;
+import io.opentracing.propagation.TextMap;
 import io.opentracing.tag.Tags;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +22,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -109,7 +111,7 @@ public class TutorialController {
             log.error("Error getting employee: ", nfe);
         }
         span.finish();
-        return new ResponseEntity<>(employee, status );
+        return new ResponseEntity<>(employee, status);
     }
 
 
@@ -135,20 +137,28 @@ public class TutorialController {
         Tags.HTTP_URL.set(span, url);
         tracer.activeSpan();
 
-        tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS, new RequestBuilderCarrier(request));
+        tracer.inject(span.context(), Format.Builtin.HTTP_HEADERS, new TextMap() {
+            @Override
+            public Iterator<Map.Entry<String, String>> iterator() {
+                throw new UnsupportedOperationException("carrier is write-only");
+            }
+
+            @Override
+            public void put(String key, String value) {
+                request.addHeader(key, value);
+            }
+        });
 
         client.newCall(request.build()).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 System.out.println(response.body().string());
             }
         });
-
 
         span.finish();
         return new ResponseEntity<>(employees, HttpStatus.OK);
@@ -169,7 +179,7 @@ public class TutorialController {
             log.info("Received Request to update employee {}", id);
 
             if (employeeService.updateEmployee(id, employee)) {
-               status = HttpStatus.OK;
+                status = HttpStatus.OK;
             }
         } catch (NumberFormatException | NoSuchElementException nfe) {
             // Fall through
