@@ -56,6 +56,7 @@
         <module>nowcoder</module>
         <module>agent-demo</module>
         <module>agent-test</module>
+        <module>skywalking-demo</module>
     </modules>
 
     <dependencyManagement>
