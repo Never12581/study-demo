@@ -1,6 +1,6 @@
 ### sentinel领头羊选举 raft
 
-当一个主服务器被判断为客观下线时，监视这个下线主服务器的各个sentinel 会进行商议，选举出一个领头的sentinel，并有领头sentinel对下线主服务器执行故障转移的操作。
+当一个主服务器被判断为客观下线时，监视这个下线主服务器的各个sentinel 会进行商议，选举出一个领头的sentinel，并由领头sentinel对下线主服务器执行故障转移的操作。
 
 #### 选举领头sentinel的规则与方法
 
@@ -24,7 +24,7 @@
 
 - 目标sentinel在接收到 sentinel is-master-down-by-addr 命令之后，将向源sentinel返回一条命令回复，回复中leader_runid参数和leader_epoch参数分别记录了目标sentinel的局部领头sentinel的runid和配置纪元
 
-- 源sentinel在接收到目标sentinel返回的命令回复之后，会检查回复中leader_epoch参数的值与自己的配置纪元的值是否相同，如果相同的话则检查leader_runid参数的值与源sentinel的runid相同的话，那么表示目标sentinel将源sentinel设置成了局部领头sentinel
+-  源sentinel在接收到目标sentinel返回的命令回复之后，会检查回复中leader_epoch参数的值与自己的配置纪元的值是否相同，如果相同的话则检查leader_runid参数的值与源sentinel的runid相同的话，那么表示目标sentinel将源sentinel设置成了局部领头sentinel
 
 - 如果有某个sentinel被半数以上的sentinel设置成了局部领头sentinel，那么这个sentinel成为了领头sentinel。
 

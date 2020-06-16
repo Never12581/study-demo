@@ -57,6 +57,7 @@
         <module>agent-demo</module>
         <module>agent-test</module>
         <module>skywalking-demo</module>
+        <module>test-demo</module>
     </modules>
 
     <dependencyManagement>
