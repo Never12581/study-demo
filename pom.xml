@@ -58,6 +58,7 @@
         <module>agent-test</module>
         <module>skywalking-demo</module>
         <module>test-demo</module>
+        <module>transactional-demo</module>
     </modules>
 
     <dependencyManagement>
@@ -184,7 +185,7 @@
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>8.0.7-dmr</version>
+                <version>8.0.20</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
