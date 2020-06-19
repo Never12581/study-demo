@@ -6,7 +6,7 @@ package com.hzx.nowcoder.hechangdui;
 public class MaxBiggerStr {
 
     public static void main(String[] args) {
-        String s = "725389";
+        String s = "1233725389";
         System.out.println(calcu(s));
     }
 
@@ -27,13 +27,13 @@ public class MaxBiggerStr {
      */
     public static int calcu(String str) {
         int[] common = new int[str.length()+1];
-        for (int i = 1; i <= str.length(); i++) {
-            common[i] = 1;
-            int max = common[i];
-            for (int k = 1; k <= i; k++) {
+        for (int i = 0; i < str.length(); i++) {
+            common[i+1] = 1;
+            int max = common[i+1];
+            for (int k = 0; k <= i; k++) {
                 if (str.charAt(i) > str.charAt(k)) {
-                    max = max(common[k]+1,max);
-                    common[i] = max ;
+                    max = max(common[k+1]+1,max);
+                    common[i+1] = max ;
                 }
             }
 
