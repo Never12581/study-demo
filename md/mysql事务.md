@@ -39,15 +39,42 @@
 
 #### Spring 传播特性验证
 
-##### 实验前提
+##### 前置了解
 
-1. 
+1. 实验地址：https://github.com/Never12581/study-demo/tree/master/transactional-demo 
 
-##### REQUIRED
+2. 查询 事务id
 
-1. 
+   ```sql
+   SELECT TRX_ID FROM INFORMATION_SCHEMA.INNODB_TRX WHERE TRX_MYSQL_THREAD_ID = CONNECTION_ID( );
+   ```
+
+3. 查询 事务名
+
+   ```java
+   TransactionSynchronizationManager.getCurrentTransactionName();
+   ```
+
+4. 实验为 ServiceA methodA 调用 ServiceB methodB，以下简称A 与 B
+
+##### REQUIRED 验证
+
+1. A 与 B 均不加上 Transactional 注解 
+
+   结论：均未开启事务
+
+2. A 加上 注解 且 传播性质为 REQUIRED  ， B 不加上注解 
+
+   结论：A 与 B 共用一个事务 
+
+3. A 加上注解 且 传播性质为 REQUIRED  ， B  加上注解 且 传播性质为 REQUIRED
+
+   结论：A 与 B 共用一个事务 
+
+
 
 #### Spring事务源码分析（待续）
 
 
 ### 二、基于innoDB存储引擎的事务详解（待续）
+

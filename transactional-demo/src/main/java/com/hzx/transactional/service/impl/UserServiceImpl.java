@@ -4,7 +4,9 @@ import com.hzx.transactional.constants.Constants;
 import com.hzx.transactional.service.UserService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,11 +20,12 @@ public class UserServiceImpl implements UserService {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-//    @Transactional
+//    @Transactional(propagation= Propagation.REQUIRED)
     public void insertUser() {
         String random = UUID.randomUUID().toString();
         jdbcTemplate.update(Constants.INSERT_USER, "name" + random.substring(0, 12), 12);
         List<Map<String, Object>> maps = jdbcTemplate.queryForList("SELECT TRX_ID FROM INFORMATION_SCHEMA.INNODB_TRX WHERE TRX_MYSQL_THREAD_ID = CONNECTION_ID( );");
-        System.out.println("User" + maps);
+        System.out.println("User --->"+ TransactionSynchronizationManager.getCurrentTransactionName());
+        System.out.println("User ===>" + maps);
     }
 }
