@@ -184,13 +184,7 @@ def serverCron():
 
 即程序遍历saveparams数组中所有的条件，只要一个条件满足则执行bgsave命令。
 
-## RDB文件结构
 
-待续
-
-## 分析RDB文件
-
-待续
 
 ## 总结
 
