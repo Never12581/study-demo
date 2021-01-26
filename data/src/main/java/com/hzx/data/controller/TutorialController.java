@@ -41,7 +41,6 @@ public class TutorialController {
 
     @PostConstruct
     public void init() {
-
         // Add some employees
         employeeService.addEmployee(Employee.builder()
                 .employeeId(1)
