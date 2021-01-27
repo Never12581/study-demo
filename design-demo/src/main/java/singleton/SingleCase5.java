@@ -19,5 +19,4 @@ public enum SingleCase5 {
     INSTANCE;
 
     // other methods
-
 }
