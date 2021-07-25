@@ -83,7 +83,8 @@ struct sdshdr {
 ### 数据结构
 
 ```c
-typedef struct listNode {
+typedef struct 
+{
   // 前置节点
   struct listNode *prev;
   // 后置节点

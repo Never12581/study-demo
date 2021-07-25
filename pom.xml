@@ -61,6 +61,7 @@
         <module>transactional-demo</module>
         <module>yongzhong-demo</module>
         <module>exam</module>
+        <module>bounded-buffer-problem</module>
     </modules>
 
     <dependencyManagement>
