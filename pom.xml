@@ -30,6 +30,7 @@
         <opentracing.contrib.version>0.2.1</opentracing.contrib.version>
         <jaeger-core.version>0.24.0</jaeger-core.version>
         <javassist.version>3.24.1-GA</javassist.version>
+        <kotlin.version>1.5.21</kotlin.version>
     </properties>
 
     <packaging>pom</packaging>
@@ -55,9 +56,7 @@
         <module>grpc-demo</module>
         <module>nowcoder</module>
         <module>agent-demo</module>
-        <module>agent-test</module>
         <module>skywalking-demo</module>
-        <module>test-demo</module>
         <module>transactional-demo</module>
         <module>yongzhong-demo</module>
         <module>exam</module>
@@ -208,5 +207,53 @@
 
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jvmTarget>1.8</jvmTarget>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

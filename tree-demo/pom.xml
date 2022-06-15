@@ -48,12 +48,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.zcy.file</groupId>
-            <artifactId>zcy-file-util</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
 
     <!--<build>-->
